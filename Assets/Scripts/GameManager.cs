@@ -16,8 +16,8 @@ namespace TEMPJAMNAMEREPLACEME
     {
         public static GameManager Instance = null;
 
-        private Level level;
-        public void SetLevel(Level newLevel) { level = newLevel; }
+        private Level curLevel;
+        public void SetLevel(Level newLevel) { curLevel = newLevel; }
 
         private void Awake()
         {
