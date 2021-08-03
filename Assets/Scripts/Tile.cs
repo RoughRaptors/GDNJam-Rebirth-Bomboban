@@ -13,7 +13,6 @@ namespace TEMPJAMNAMEREPLACEME
 
         private float physicalXPos;
         private float physicalYPos;
-        private float physicalZPos;
 
         private TileOccupier tileOccupier;
         public TileOccupier GetTileOuccupier() { return tileOccupier; }
@@ -22,18 +21,17 @@ namespace TEMPJAMNAMEREPLACEME
             tileOccupier = occupier;
         }
 
-        public void InitializeData(int newRow, int newCol, float xPos, float zPos)
+        public void InitializeData(int newRow, int newCol, float xPos, float yPos)
         {
             row = newRow;
             col = newCol;
             physicalXPos = xPos;
-            physicalYPos = 0;
-            physicalZPos = zPos;
+            physicalYPos = yPos;
 
-            tileType = DataManager.TileType.Empty;
+            tileType = DataManager.TileType.Ground;
             tileOccupier = null;
 
-            transform.position = new Vector3(physicalXPos, physicalYPos, physicalZPos);
+            transform.position = new Vector3(physicalXPos, physicalYPos);
         }
 
         void Start()
