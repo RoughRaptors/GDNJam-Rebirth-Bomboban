@@ -8,11 +8,20 @@ namespace TEMPJAMNAMEREPLACEME
     {
         private DataManager.TileType tileType;
 
-        public int row = -1;
-        public int col = -1;
+        private int row = -1;
+
+        public int GetRow() { return row; }
+
+        private int col = -1;
+
+        public int GetCol() { return col; }
 
         private float physicalXPos;
+        public float GetPhysicalXPos() { return physicalXPos; }
+
         private float physicalYPos;
+
+        public float GetPhysicalYPos() { return physicalYPos; }
 
         private TileOccupier tileOccupier;
         public TileOccupier GetTileOuccupier() { return tileOccupier; }
@@ -38,5 +47,6 @@ namespace TEMPJAMNAMEREPLACEME
         {
 
         }
+
     }
 }

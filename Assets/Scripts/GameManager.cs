@@ -64,6 +64,7 @@ namespace TEMPJAMNAMEREPLACEME
 
         private LoadedLevel curLevel = null;
         public void SetCurLevel(LoadedLevel newLevel) { curLevel = newLevel; }
+        public LoadedLevel GetCurLevel() { return curLevel; }
 
         private void Awake()
         {
@@ -120,6 +121,28 @@ namespace TEMPJAMNAMEREPLACEME
         public void OnDestroyLevelClicked()
         {
             DestroyLevel();
+        }
+
+        public Tile GetTileAtLocation(int row, int col)
+        {
+            if (row >= 0 && row < DataManager.NUM_ROWS && col >= 0 && col < DataManager.NUM_COLS)
+            {
+                return curLevel.GetLevel()[row, col];
+            }
+            return null;
+        }
+        public TileOccupier GetOccupierAtLocation(int row, int col)
+        {
+            if (row >= 0 && row < DataManager.NUM_ROWS && col >= 0 && col < DataManager.NUM_COLS)
+            {
+                return curLevel.GetLevel()[row, col].GetTileOuccupier();
+            }
+            return null;
+        }
+
+        public TileOccupier GetPlayer()
+        {
+            return curLevel.GetPlayer();
         }
     }
 }

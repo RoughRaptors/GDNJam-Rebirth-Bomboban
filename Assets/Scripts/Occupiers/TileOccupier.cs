@@ -13,24 +13,5 @@ namespace TEMPJAMNAMEREPLACEME
 
         public abstract void ReactToExplode(int fromRow, int fromCol);
 
-        public int GetRow()
-        {
-            if (curTile)
-            {
-                return curTile.row;
-            }
-
-            return -1;
-        }
-
-        public int GetCol()
-        {
-            if (curTile)
-            {
-                return curTile.col;
-            }
-
-            return -1;
-        }
     }
 }

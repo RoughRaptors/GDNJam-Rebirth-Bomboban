@@ -8,6 +8,10 @@ namespace TEMPJAMNAMEREPLACEME
     {
         // the internal representation of the board
         Tile[,] level = new Tile[DataManager.NUM_ROWS, DataManager.NUM_COLS];
+        public Tile[,] GetLevel() { return level; }
+
+        TileOccupier player;
+        public TileOccupier GetPlayer() { return player; }
 
         // initializes all of the individual tiles
         void InitializeLevel(int levelIndex)
@@ -36,6 +40,13 @@ namespace TEMPJAMNAMEREPLACEME
                             TileOccupier newOccupier = newOccupierObj.GetComponent<TileOccupier>();
                             if (!(newOccupier is null))
                             {
+                                if (newOccupier.GetComponent<PlayerController>())
+                                {
+                                    
+                                    player = newOccupier;
+                                    newOccupier.GetComponent<PlayerController>().SetPlayerObject(player);
+                                }
+                                
                                 tile.SetTileOccupier(newOccupier);
                                 newOccupier.SetCurTile(tile);
                                 newOccupier.gameObject.transform.position = physicalPiecePos;
