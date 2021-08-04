@@ -36,7 +36,7 @@ namespace TEMPJAMNAMEREPLACEME
             MAX = 7
         }
 
-        public static readonly int[,] testLevelTiles = new int[NUM_ROWS, NUM_COLS] { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        public static readonly int[,] testLevelTiles1 = new int[NUM_ROWS, NUM_COLS] { { 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                                                             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                                                             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                                                             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -58,7 +58,7 @@ namespace TEMPJAMNAMEREPLACEME
                                                             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
         };
 
-        public static readonly int[,] testLevelBlocks = new int[NUM_ROWS, NUM_COLS] { { 0, 1, 2, 3, 4, 5, 6, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        public static readonly int[,] testLevelOccupiers1 = new int[NUM_ROWS, NUM_COLS] { { 0, 1, 2, 3, 4, 5, 6, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                                                             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                                                             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                                                             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -79,5 +79,16 @@ namespace TEMPJAMNAMEREPLACEME
                                                             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                                                             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
         };
+
+        // cache off our levels since we are going to need to do this after the refactor and tell the game when we are ready for them
+        // each "level" is composed of a set of tiles AND a set of occupiers - not ideal but we don't have time to do it right and i'm bad with bitmasks
+        // we can access our levels easily this way, especially for testing, just be careful to not mix up indicies for tileLevels and occupierLevels, it's error prone
+        public static List<int[,]> levelTiles = new List<int[,]>();
+        public static List<int[,]> levelOccupiers = new List<int[,]>();
+        public static void InitializeLevelsData()
+        {
+            levelTiles.Add(testLevelTiles1);
+            levelOccupiers.Add(testLevelOccupiers1);
+        }
     }
 }

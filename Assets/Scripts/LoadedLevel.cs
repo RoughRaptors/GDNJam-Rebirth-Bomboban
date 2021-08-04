@@ -4,68 +4,32 @@ using UnityEngine;
 
 namespace TEMPJAMNAMEREPLACEME
 {
-    public class Level : MonoBehaviour
+    public class LoadedLevel : MonoBehaviour
     {
-#pragma warning disable CS0649
-        [SerializeField]
-        GameObject selfObj;
-
-        [SerializeField]
-        GameObject groundTileObj;
-
-        [SerializeField]
-        GameObject wallTileObj;
-
-        [SerializeField]
-        GameObject iceCubeObj;
-
-        [SerializeField]
-        GameObject iceShardObj;
-
-        [SerializeField]
-        GameObject crackedRockObj;
-
-        [SerializeField]
-        GameObject titaniumBoxObj;
-
-        [SerializeField]
-        GameObject holeObj;
-
-        [SerializeField]
-        GameObject exitObj;
-#pragma warning restore CS0649
-
         // the internal representation of the board
         Tile[,] level = new Tile[DataManager.NUM_ROWS, DataManager.NUM_COLS];
 
-        void Start()
-        {
-            InitializeLevel();
-            GameManager.Instance.SetLevel(this);
-        }
-
         // initializes all of the individual tiles
-        void InitializeLevel()
+        void InitializeLevel(int levelIndex)
         {
+            // create each of our tiles
             for (int row = 0; row < DataManager.NUM_ROWS; ++row)
             {
                 for (int col = 0; col < DataManager.NUM_COLS; ++col)
                 {
-                    // if we don't have a tile here, make one
-                    Tile tile = level[row, col];
-                    if (tile is null)
-                    {
-                        // where are we in the game space?
-                        Vector3 physicalPiecePos = GetGameSpacePosFromRowCol(row, col);
+                    // where are we in the game space?
+                    Vector3 physicalPiecePos = GetGameSpacePosFromRowCol(row, col);
 
-                        // instantiate our tile
-                        GameObject tileObj = GetTileObject(row, col);
+                    // instantiate our tile
+                    GameObject tileObj = GetTileObjectForLevel(row, col, levelIndex);
+                    if (tileObj)
+                    {
                         GameObject newTile = Instantiate(tileObj);
-                        tile = newTile.GetComponent<Tile>();
+                        Tile tile = newTile.GetComponent<Tile>();
                         tile.InitializeData(row, col, physicalPiecePos.x, physicalPiecePos.y);
 
                         // instantiate our occupier, if we have one
-                        GameObject occupierObj = GetOccupierObject(row, col);
+                        GameObject occupierObj = GetOccupierObjectForLevel(row, col, levelIndex);
                         if (occupierObj)
                         {
                             GameObject newOccupierObj = Instantiate(occupierObj);
@@ -73,61 +37,99 @@ namespace TEMPJAMNAMEREPLACEME
                             if (!(newOccupier is null))
                             {
                                 tile.SetTileOccupier(newOccupier);
+                                newOccupier.SetCurTile(tile);
                                 newOccupier.gameObject.transform.position = physicalPiecePos;
                             }
-
-                            level[row, col] = tile;
                         }
+
+                        level[row, col] = tile;
                     }
                 }
             }
         }
 
-        public GameObject GetTileObject(int row, int col)
+        public void DeconstructLevel()
         {
-            DataManager.TileType tileType = (DataManager.TileType)DataManager.testLevelTiles[row, col];
+            for (int row = 0; row < DataManager.NUM_ROWS; ++row)
+            {
+                for (int col = 0; col < DataManager.NUM_COLS; ++col)
+                {
+                    // delete our tile
+                    Tile tile = level[row, col];
+                    if (tile && tile.gameObject)
+                    {
+                        Destroy(tile.gameObject);
+
+                        // delete our occupier if one exists
+                        TileOccupier tileOccupier = level[row, col].GetTileOuccupier();
+                        if (tileOccupier && tileOccupier.gameObject)
+                        {
+                            Destroy(tileOccupier.gameObject);
+                        }
+                    }
+                }
+            }
+
+            //Destroy(this);
+        }
+
+        public GameObject GetTileObjectForLevel(int row, int col, int levelIndex)
+        {
+            // not a level
+            if (levelIndex >= DataManager.levelTiles.Count)
+            {
+                return null;
+            }
+
+            DataManager.TileType tileType = (DataManager.TileType)DataManager.levelTiles[levelIndex][row, col];
             if(tileType == DataManager.TileType.Ground)
             {
-                return groundTileObj;
+                return GameManager.Instance.GetGroundTileObj();
             }
             else if(tileType == DataManager.TileType.Wall)
             {
-                return wallTileObj;
+                return GameManager.Instance.GetWallTileObj();
             }
 
             return null;
         }
 
-        public GameObject GetOccupierObject(int row, int col)
+        public GameObject GetOccupierObjectForLevel(int row, int col, int levelIndex)
         {
-            DataManager.OccupierType occupierType = (DataManager.OccupierType)DataManager.testLevelBlocks[row, col];
+            // not a level
+            if(levelIndex >= DataManager.levelOccupiers.Count)
+            {
+                return null;
+            }
+
+            DataManager.OccupierType occupierType = (DataManager.OccupierType)DataManager.levelOccupiers[levelIndex][row, col];
             if (occupierType == DataManager.OccupierType.Self)
             {
-                return selfObj;
+                return GameManager.Instance.GetSelfObj();
             }
             else if(occupierType == DataManager.OccupierType.IceCube)
             {
-                return iceCubeObj;
+                return GameManager.Instance.GetIceCubeObj();
             }
             else if (occupierType == DataManager.OccupierType.IceShard)
             {
-                return iceShardObj;
+                return GameManager.Instance.GetIceShardObj();
             }
             else if (occupierType == DataManager.OccupierType.CrackedRock)
             {
-                return crackedRockObj;
+                return GameManager.Instance.GetCrackedRockObj();
             }
             else if (occupierType == DataManager.OccupierType.TitaniumBox)
             {
-                return titaniumBoxObj;
+                return GameManager.Instance.GetCrackedRockObj();
             }
             else if (occupierType == DataManager.OccupierType.Hole)
             {
-                return holeObj;
+                return GameManager.Instance.GeHoleObj();
             }
             else if (occupierType == DataManager.OccupierType.Exit)
             {
-                return exitObj;
+                return GameManager.Instance.GetExitObj();
             }
             else if(occupierType == DataManager.OccupierType.None)
             {
@@ -153,6 +155,7 @@ namespace TEMPJAMNAMEREPLACEME
 
             return retVec;
         }
+
         public TileOccupier GetTileOccupierAtPosition(int row, int col)
         {
             if (row < DataManager.NUM_ROWS && col < DataManager.NUM_COLS)
@@ -161,6 +164,14 @@ namespace TEMPJAMNAMEREPLACEME
             }
 
             return null;
+        }
+
+        public void LoadLevel(int levelIndex)
+        {
+            if(levelIndex <= DataManager.levelTiles.Count && levelIndex <= DataManager.levelOccupiers.Count)
+            {
+                InitializeLevel(levelIndex);
+            }
         }
     }
 }
