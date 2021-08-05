@@ -114,7 +114,11 @@ namespace TEMPJAMNAMEREPLACEME
             }
 
             DataManager.OccupierType occupierType = (DataManager.OccupierType)DataManager.levelOccupiers[levelIndex][row, col];
-            if (occupierType == DataManager.OccupierType.Self)
+            if (occupierType == DataManager.OccupierType.None)
+            {
+                // nothing
+            }
+            else if (occupierType == DataManager.OccupierType.Self)
             {
                 return GameManager.Instance.GetSelfObj();
             }
@@ -141,10 +145,6 @@ namespace TEMPJAMNAMEREPLACEME
             else if (occupierType == DataManager.OccupierType.Exit)
             {
                 return GameManager.Instance.GetExitObj();
-            }
-            else if(occupierType == DataManager.OccupierType.None)
-            {
-                // nothing
             }
             else
             {

@@ -15,67 +15,48 @@ namespace TEMPJAMNAMEREPLACEME
 
         void Update()
         {
-            LoadedLevel curLevel = GameManager.Instance.GetCurLevel();
-            if (!(curLevel is null))
+            if (Time.time - lastMovementTime >= TIME_BETWEEN_MOVES)
             {
-                if (Time.time - lastMovementTime >= TIME_BETWEEN_MOVES)
+                bool isValidTile = false;
+                int newRow = 0;
+                int newCol = 0;
+                if (Input.GetKeyDown(KeyCode.D))
                 {
-                    bool isValidTile = false;
-                    int newRow = 0;
-                    int newCol = 0;
-                    if (Input.GetKeyDown(KeyCode.D))
-                    {
-                        // moving right
-                        newRow = player.GetCurTile().GetRow();
-                        newCol = player.GetCurTile().GetCol() + 1;
+                    // moving right
+                    newRow = player.GetCurTile().GetRow();
+                    newCol = player.GetCurTile().GetCol() + 1;
 
-                        isValidTile = IsValidTile(newRow, newCol);
-                    }
-                    else if (Input.GetKeyDown(KeyCode.A))
-                    {
-                        // moving left
-                        newRow = player.GetCurTile().GetRow();
-                        newCol = player.GetCurTile().GetCol() - 1;
+                    isValidTile = IsValidTile(newRow, newCol);
+                }
+                else if (Input.GetKeyDown(KeyCode.A))
+                {
+                    // moving left
+                    newRow = player.GetCurTile().GetRow();
+                    newCol = player.GetCurTile().GetCol() - 1;
 
-                        isValidTile = IsValidTile(newRow, newCol);
+                    isValidTile = IsValidTile(newRow, newCol);
 
-                    }
-                    else if (Input.GetKeyDown(KeyCode.W))
-                    {
-                        // moving up
-                        newRow = player.GetCurTile().GetRow() - 1;
-                        newCol = player.GetCurTile().GetCol();
+                }
+                else if (Input.GetKeyDown(KeyCode.W))
+                {
+                    // moving up
+                    newRow = player.GetCurTile().GetRow() - 1;
+                    newCol = player.GetCurTile().GetCol();
 
-                        isValidTile = IsValidTile(newRow, newCol);
-                    }
-                    else if (Input.GetKeyDown(KeyCode.S))
-                    {
-                        // moving down
-                        newRow = player.GetCurTile().GetRow() + 1;
-                        newCol = player.GetCurTile().GetCol();
+                    isValidTile = IsValidTile(newRow, newCol);
+                }
+                else if (Input.GetKeyDown(KeyCode.S))
+                {
+                    // moving down
+                    newRow = player.GetCurTile().GetRow() + 1;
+                    newCol = player.GetCurTile().GetCol();
 
-                        isValidTile = IsValidTile(newRow, newCol);
-                    }
+                    isValidTile = IsValidTile(newRow, newCol);
+                }
 
-                    if (isValidTile)
-                    {
-                        Tile newTile = GameManager.Instance.GetTileAtLocation(newRow, newCol);
-                        Vector3 newPos = new Vector3(newTile.GetPhysicalXPos(), newTile.GetPhysicalYPos());
-
-                        newTile.SetTileOccupier(curLevel.GetPlayer());
-                        GameManager.Instance.GetOccupierAtLocation(newRow, newCol).SetCurTile(newTile);
-
-                        // stop our old lerp if it exists, and lerp to our new position
-                        if (lerpCoroutine != null)
-                        {
-                            StopCoroutine(lerpCoroutine);
-                        }
-
-                        lerpCoroutine = StartCoroutine(HandleMovePlayer(newPos));
-
-                        // keep track of our movement time
-                        lastMovementTime = Time.time;
-                    }
+                if (isValidTile)
+                {
+                    HandlePhysicalPlayerMovement(newRow, newCol);
                 }
             }
         }
@@ -95,7 +76,41 @@ namespace TEMPJAMNAMEREPLACEME
             return false;
         }
 
-        private IEnumerator HandleMovePlayer(Vector3 newPos)
+        void HandlePhysicalPlayerMovement(int newRow, int newCol)
+        {
+            // if our new tile has no occupier, move there. otherwise handle collision
+            Tile newTile = GameManager.Instance.GetTileAtLocation(newRow, newCol);
+            if(newTile.GetTileOuccupier() == null)
+            {
+                // before anything, the player's OLD tile, which is the CURRENT tile before we set anything in the function
+                // null out the tile occupier
+                player.GetCurTile().SetTileOccupier(null);
+
+                // our new tile occupier is the player and the occupier's tile is the new tile
+                // i hate having intertwined references here but, ugh, no time
+                newTile.SetTileOccupier(player);
+                player.SetCurTile(newTile);
+
+                Vector3 newPos = new Vector3(newTile.GetPhysicalXPos(), newTile.GetPhysicalYPos());
+
+                // stop our old lerp if it exists, and lerp to our new position
+                if (lerpCoroutine != null)
+                {
+                    StopCoroutine(lerpCoroutine);
+                }
+
+                lerpCoroutine = StartCoroutine(HandleMovePlayerPhysical(newPos));
+
+                // keep track of our movement time
+                lastMovementTime = Time.time;
+            }
+            else
+            {
+
+            }
+        }
+
+        private IEnumerator HandleMovePlayerPhysical(Vector3 newPos)
         {
             float elapsedTime = 0;
             float waitTime = 3f;
@@ -108,6 +123,11 @@ namespace TEMPJAMNAMEREPLACEME
                 // Yield here
                 yield return null;
             }
+        }
+
+        void HandleOccupierCollision()
+        {
+
         }
     }
 }
