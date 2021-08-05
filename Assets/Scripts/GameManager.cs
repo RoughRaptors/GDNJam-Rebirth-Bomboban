@@ -84,11 +84,6 @@ namespace TEMPJAMNAMEREPLACEME
             destroyLevelsBtn.GetComponentInChildren<Text>().text = "Destroy current level";
         }
 
-        private void Update()
-        {
-
-        }
-
         public void LoadLevel(int levelIndex)
         {
             if (!(curLevel is null))
@@ -129,6 +124,7 @@ namespace TEMPJAMNAMEREPLACEME
             {
                 return curLevel.GetLevel()[row, col];
             }
+
             return null;
         }
         public TileOccupier GetOccupierAtLocation(int row, int col)
@@ -137,6 +133,7 @@ namespace TEMPJAMNAMEREPLACEME
             {
                 return curLevel.GetLevel()[row, col].GetTileOuccupier();
             }
+
             return null;
         }
 

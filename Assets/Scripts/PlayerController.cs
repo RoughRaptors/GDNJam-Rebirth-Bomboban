@@ -7,13 +7,7 @@ namespace TEMPJAMNAMEREPLACEME
     public class PlayerController : MonoBehaviour
     {
         public TileOccupier player;
-        private IEnumerator curCoroutine;
-
-        private void Start()
-        {
-            Vector3 vector = new Vector3(0, 0, 0);
-            curCoroutine = HandleMovePlayer(vector);
-        }
+        private Coroutine lerpCoroutine = null;
 
         void Update()
         {
@@ -57,19 +51,21 @@ namespace TEMPJAMNAMEREPLACEME
                     isValidTile = IsValidTile(newRow, newCol);
                 }
 
-
                 if (isValidTile)
                 {
                     Tile newTile = GameManager.Instance.GetTileAtLocation(newRow, newCol);
                     Vector3 newPos = new Vector3(newTile.GetPhysicalXPos(), newTile.GetPhysicalYPos());
 
-                    StopCoroutine(curCoroutine);
-                    StartCoroutine(HandleMovePlayer(newPos));
                     newTile.SetTileOccupier(curLevel.GetPlayer());
                     GameManager.Instance.GetOccupierAtLocation(newRow, newCol).SetCurTile(newTile);
-                    print("new pos is " + newPos);
-                    print("new row is " + newRow);
-                    print("new col is " + newCol);
+
+                    // stop our old lerp if it exists, and lerp to our new position
+                    if (lerpCoroutine != null)
+                    {
+                        StopCoroutine(lerpCoroutine);
+                    }
+
+                    lerpCoroutine = StartCoroutine(HandleMovePlayer(newPos));
                 }
             }
         }
@@ -95,8 +91,7 @@ namespace TEMPJAMNAMEREPLACEME
             float waitTime = 3f;
 
             while (elapsedTime < waitTime)
-            {
-                
+            {                
                 player.transform.position = Vector3.Lerp(player.transform.position, newPos, (elapsedTime / waitTime));
                 elapsedTime += Time.deltaTime;
 
