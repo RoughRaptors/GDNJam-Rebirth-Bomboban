@@ -580,7 +580,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30d27914d288cdc45b9009b4e05db61a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selfObj: {fileID: 4210983404383292475, guid: 2688d5f030894f8488a8a4d8c6051c01, type: 3}
+  playerObj: {fileID: 4210983404383292475, guid: 2688d5f030894f8488a8a4d8c6051c01, type: 3}
   groundTileObj: {fileID: 4649316253035778553, guid: 3b16129361b1ef4419b1f1b752777b90, type: 3}
   wallTileObj: {fileID: 4649316253035778553, guid: b12d8f3bfb4175b4385591c0b15ae6fa, type: 3}
   iceCubeObj: {fileID: 4210983404383292475, guid: 645ba64f8a918934795da9fa7f1694c2, type: 3}

@@ -10,10 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4210983404383292476}
   - component: {fileID: 4210983404383292477}
-  - component: {fileID: 3477047676311948461}
-  - component: {fileID: -8612151026598712437}
+  - component: {fileID: 5869186521246159841}
   m_Layer: 0
-  m_Name: Player
+  m_Name: Ice Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -73,8 +72,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -9095717837082945937, guid: 34587324d412940a79d530020c957dc0, type: 3}
-  m_Color: {r: 0.53231484, g: 0.745283, b: 0.4176397, a: 1}
+  m_Sprite: {fileID: -2413806693520163455, guid: ebe73ca9363db456bacf42c025bb4847, type: 3}
+  m_Color: {r: 0, g: 0.57415694, b: 0.8207547, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -84,7 +83,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &3477047676311948461
+--- !u!114 &5869186521246159841
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -93,18 +92,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4210983404383292475}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9bb35a8ad469293439d6843f405e1e36, type: 3}
+  m_Script: {fileID: 11500000, guid: e5201f9447eb02140b0c703804268b28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-8612151026598712437
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4210983404383292475}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d8b7add8faf52e94f85dc2efbbfc80a1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  occupierType: 2
