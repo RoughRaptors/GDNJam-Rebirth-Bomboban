@@ -28,9 +28,9 @@ namespace TEMPJAMNAMEREPLACEME
                     GameObject tileObj = GetTileObjectForLevel(row, col, levelIndex);
                     if (tileObj)
                     {
-                        GameObject newTile = Instantiate(tileObj);
-                        Tile tile = newTile.GetComponent<Tile>();
-                        tile.InitializeData(row, col, physicalPiecePos.x, physicalPiecePos.y);
+                        GameObject newTileObj = Instantiate(tileObj);
+                        Tile newTile = newTileObj.GetComponent<Tile>();
+                        newTile.InitializeData(row, col, physicalPiecePos.x, physicalPiecePos.y);
 
                         // instantiate our occupier, if we have one
                         GameObject occupierObj = GetOccupierObjectForLevel(row, col, levelIndex);
@@ -41,19 +41,18 @@ namespace TEMPJAMNAMEREPLACEME
                             if (!(newOccupier is null))
                             {
                                 if (newOccupier.GetComponent<PlayerController>())
-                                {
-                                    
+                                {                                    
                                     player = newOccupier;
                                     newOccupier.GetComponent<PlayerController>().SetPlayerObject(player);
                                 }
                                 
-                                tile.SetTileOccupier(newOccupier);
-                                newOccupier.SetCurTile(tile);
+                                newTile.SetTileOccupier(newOccupier);
+                                newOccupier.SetCurTile(newTile);
                                 newOccupier.gameObject.transform.position = physicalPiecePos;
                             }
                         }
 
-                        level[row, col] = tile;
+                        level[row, col] = newTile;
                     }
                 }
             }
@@ -120,7 +119,7 @@ namespace TEMPJAMNAMEREPLACEME
             }
             else if (occupierType == DataManager.OccupierType.Self)
             {
-                return GameManager.Instance.GetSelfObj();
+                return GameManager.Instance.GetPlayerObj();
             }
             else if(occupierType == DataManager.OccupierType.IceCube)
             {

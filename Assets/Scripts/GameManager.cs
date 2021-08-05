@@ -17,8 +17,8 @@ namespace TEMPJAMNAMEREPLACEME
 
 #pragma warning disable CS0649
         [SerializeField]
-        GameObject selfObj;
-        public GameObject GetSelfObj() { return selfObj; }
+        GameObject playerObj;
+        public GameObject GetPlayerObj() { return playerObj; }
 
         [SerializeField]
         GameObject groundTileObj;

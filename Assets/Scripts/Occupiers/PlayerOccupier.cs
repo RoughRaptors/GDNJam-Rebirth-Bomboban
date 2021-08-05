@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace TEMPJAMNAMEREPLACEME
 {
-    public class SelfOccupier : TileOccupier
+    public class PlayerOccupier : TileOccupier
     {
         void Start()
         {
