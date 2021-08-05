@@ -7,69 +7,75 @@ namespace TEMPJAMNAMEREPLACEME
     public class PlayerController : MonoBehaviour
     {
         public TileOccupier player;
-        private IEnumerator curCoroutine;
+        private Coroutine lerpCoroutine = null;
 
-        private void Start()
-        {
-            Vector3 vector = new Vector3(0, 0, 0);
-            curCoroutine = HandleMovePlayer(vector);
-        }
+        // for now, limit how fast the player can move to avoid any problems like moving diagonally or diagonal lerping
+        float lastMovementTime;
+        const float TIME_BETWEEN_MOVES = 0.25f;
 
         void Update()
         {
             LoadedLevel curLevel = GameManager.Instance.GetCurLevel();
             if (!(curLevel is null))
             {
-                bool isValidTile = false;
-                int newRow = 0;
-                int newCol = 0;
-                if (Input.GetKeyDown(KeyCode.D))
+                if (Time.time - lastMovementTime >= TIME_BETWEEN_MOVES)
                 {
-                    // moving right
-                    newRow = player.GetCurTile().GetRow();
-                    newCol = player.GetCurTile().GetCol() + 1;
+                    bool isValidTile = false;
+                    int newRow = 0;
+                    int newCol = 0;
+                    if (Input.GetKeyDown(KeyCode.D))
+                    {
+                        // moving right
+                        newRow = player.GetCurTile().GetRow();
+                        newCol = player.GetCurTile().GetCol() + 1;
 
-                    isValidTile = IsValidTile(newRow, newCol);
-                }
-                else if(Input.GetKeyDown(KeyCode.A))
-                {
-                    // moving left
-                    newRow = player.GetCurTile().GetRow();
-                    newCol = player.GetCurTile().GetCol() - 1;
+                        isValidTile = IsValidTile(newRow, newCol);
+                    }
+                    else if (Input.GetKeyDown(KeyCode.A))
+                    {
+                        // moving left
+                        newRow = player.GetCurTile().GetRow();
+                        newCol = player.GetCurTile().GetCol() - 1;
 
-                    isValidTile = IsValidTile(newRow, newCol);
+                        isValidTile = IsValidTile(newRow, newCol);
 
-                }
-                else if(Input.GetKeyDown(KeyCode.W))
-                {
-                    // moving up
-                    newRow = player.GetCurTile().GetRow() - 1;
-                    newCol = player.GetCurTile().GetCol();
+                    }
+                    else if (Input.GetKeyDown(KeyCode.W))
+                    {
+                        // moving up
+                        newRow = player.GetCurTile().GetRow() - 1;
+                        newCol = player.GetCurTile().GetCol();
 
-                    isValidTile = IsValidTile(newRow, newCol);
-                }
-                else if(Input.GetKeyDown(KeyCode.S))
-                {
-                    // moving down
-                    newRow = player.GetCurTile().GetRow() + 1;
-                    newCol = player.GetCurTile().GetCol();
+                        isValidTile = IsValidTile(newRow, newCol);
+                    }
+                    else if (Input.GetKeyDown(KeyCode.S))
+                    {
+                        // moving down
+                        newRow = player.GetCurTile().GetRow() + 1;
+                        newCol = player.GetCurTile().GetCol();
 
-                    isValidTile = IsValidTile(newRow, newCol);
-                }
+                        isValidTile = IsValidTile(newRow, newCol);
+                    }
 
+                    if (isValidTile)
+                    {
+                        Tile newTile = GameManager.Instance.GetTileAtLocation(newRow, newCol);
+                        Vector3 newPos = new Vector3(newTile.GetPhysicalXPos(), newTile.GetPhysicalYPos());
 
-                if (isValidTile)
-                {
-                    Tile newTile = GameManager.Instance.GetTileAtLocation(newRow, newCol);
-                    Vector3 newPos = new Vector3(newTile.GetPhysicalXPos(), newTile.GetPhysicalYPos());
+                        newTile.SetTileOccupier(curLevel.GetPlayer());
+                        GameManager.Instance.GetOccupierAtLocation(newRow, newCol).SetCurTile(newTile);
 
-                    StopCoroutine(curCoroutine);
-                    StartCoroutine(HandleMovePlayer(newPos));
-                    newTile.SetTileOccupier(curLevel.GetPlayer());
-                    GameManager.Instance.GetOccupierAtLocation(newRow, newCol).SetCurTile(newTile);
-                    print("new pos is " + newPos);
-                    print("new row is " + newRow);
-                    print("new col is " + newCol);
+                        // stop our old lerp if it exists, and lerp to our new position
+                        if (lerpCoroutine != null)
+                        {
+                            StopCoroutine(lerpCoroutine);
+                        }
+
+                        lerpCoroutine = StartCoroutine(HandleMovePlayer(newPos));
+
+                        // keep track of our movement time
+                        lastMovementTime = Time.time;
+                    }
                 }
             }
         }
@@ -95,8 +101,7 @@ namespace TEMPJAMNAMEREPLACEME
             float waitTime = 3f;
 
             while (elapsedTime < waitTime)
-            {
-                
+            {                
                 player.transform.position = Vector3.Lerp(player.transform.position, newPos, (elapsedTime / waitTime));
                 elapsedTime += Time.deltaTime;
 

@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace TEMPJAMNAMEREPLACEME
 {
-
     public abstract class TileOccupier : MonoBehaviour
     {
         protected Tile curTile;
