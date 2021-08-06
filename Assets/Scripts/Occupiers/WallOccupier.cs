@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace TEMPJAMNAMEREPLACEME
 {
-    public class HoleOccupier : TileOccupier
+    public class WallOccupier : TileOccupier
     {
         void Start()
         {
@@ -18,7 +18,13 @@ namespace TEMPJAMNAMEREPLACEME
 
         public override bool ReactToCollision(TileOccupier collidingOccupier, DataManager.Direction collisionDirection)
         {
-            return false;
+            // do nothing if we collided with player
+            if (collidingOccupier is PlayerOccupier)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

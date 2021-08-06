@@ -12,31 +12,41 @@ namespace TEMPJAMNAMEREPLACEME
         // the distance between tiles
         public const float DISTANCE_BETWEEN_TILES = 1.0f;
 
+        public const float LERP_COROUTINE_WAIT_TIME = 0.3f;
+
         // the physical start location of the board
         // ex: GameManager.Instance.GetLevel()[0,0] is the top left physically, so give the center of that square
         public static readonly Vector3 PHYSICAL_START_POS_VEC = new Vector3(-10, 10, 0);
 
+        public enum Direction
+        {
+            None = 0,
+            Up,
+            Down,
+            Left,
+            Right
+        }
+
         public enum TileType
         {
             Ground = 0,
-            Wall,
-            MAX = 1
         }
 
         public enum OccupierType
         {
             None = 0,
-            Self,
+            Player,
             IceCube,
             IceShard,
             CrackedRock,
             TitaniumBox,
+            Wall,
             Hole,
             Exit,
-            MAX = 7
+            MAX = 8
         }
 
-        public static readonly int[,] testLevelTiles1 = new int[NUM_ROWS, NUM_COLS] { { 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        public static readonly int[,] testLevelTiles1 = new int[NUM_ROWS, NUM_COLS] { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                                                             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                                                             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                                                             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -58,10 +68,10 @@ namespace TEMPJAMNAMEREPLACEME
                                                             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
         };
 
-        public static readonly int[,] testLevelOccupiers1 = new int[NUM_ROWS, NUM_COLS] { { 0, 1, 2, 3, 4, 5, 6, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        public static readonly int[,] testLevelOccupiers1 = new int[NUM_ROWS, NUM_COLS] { { 0, 1, 2, 3, 4, 5, 6, 7, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                                                             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                                                             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                                                            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                                                            { 0, 0, 2, 3, 4, 5, 6, 7, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                                                             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                                                             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                                                             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },

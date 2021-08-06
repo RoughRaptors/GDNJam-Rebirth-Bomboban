@@ -96,10 +96,6 @@ namespace TEMPJAMNAMEREPLACEME
             {
                 return GameManager.Instance.GetGroundTileObj();
             }
-            else if(tileType == DataManager.TileType.Wall)
-            {
-                return GameManager.Instance.GetWallTileObj();
-            }
 
             return null;
         }
@@ -117,7 +113,7 @@ namespace TEMPJAMNAMEREPLACEME
             {
                 // nothing
             }
-            else if (occupierType == DataManager.OccupierType.Self)
+            else if (occupierType == DataManager.OccupierType.Player)
             {
                 return GameManager.Instance.GetPlayerObj();
             }
@@ -135,7 +131,11 @@ namespace TEMPJAMNAMEREPLACEME
             }
             else if (occupierType == DataManager.OccupierType.TitaniumBox)
             {
-                return GameManager.Instance.GetCrackedRockObj();
+                return GameManager.Instance.GeTitaniumBoxObj();
+            }
+            else if (occupierType == DataManager.OccupierType.Wall)
+            {
+                return GameManager.Instance.GetWallObj();
             }
             else if (occupierType == DataManager.OccupierType.Hole)
             {

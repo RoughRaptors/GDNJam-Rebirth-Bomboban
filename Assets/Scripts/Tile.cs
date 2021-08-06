@@ -42,11 +42,5 @@ namespace TEMPJAMNAMEREPLACEME
 
             transform.position = new Vector3(physicalXPos, physicalYPos);
         }
-
-        void Start()
-        {
-
-        }
-
     }
 }
