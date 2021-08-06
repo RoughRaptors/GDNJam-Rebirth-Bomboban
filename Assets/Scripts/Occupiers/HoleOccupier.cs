@@ -18,6 +18,13 @@ namespace TEMPJAMNAMEREPLACEME
 
         public override bool ReactToCollision(TileOccupier collidingOccupier, DataManager.Direction collisionDirection)
         {
+            // titanium box replaces hole
+            if(collidingOccupier is TitaniumBoxOccupier)
+            {
+                Destroy(this.gameObject);
+                Destroy(collidingOccupier.gameObject);
+            }
+
             return false;
         }
     }
