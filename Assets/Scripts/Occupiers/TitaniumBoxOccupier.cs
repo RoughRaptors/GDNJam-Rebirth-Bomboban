@@ -32,7 +32,7 @@ namespace TEMPJAMNAMEREPLACEME
             }
             else if (collisionDirection == DataManager.Direction.Right)
             {
-                newCol = newCol - 1;
+                newCol = newCol + 1;
             }
 
             // don't move if it were going to collide with another object
