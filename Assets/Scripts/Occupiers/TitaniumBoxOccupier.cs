@@ -35,13 +35,6 @@ namespace TEMPJAMNAMEREPLACEME
                 newCol = newCol + 1;
             }
 
-            // don't move if it were going to collide with another object
-            TileOccupier newTileOccupierAfterMove = GameManager.Instance.GetOccupierAtLocation(newRow, newCol);
-            if(newTileOccupierAfterMove)
-            {
-                return false;
-            }
-
             // don't go out of bounds
             if ((curTile.GetRow() == 0 && collisionDirection == DataManager.Direction.Up)
                 || (curTile.GetRow() == DataManager.NUM_ROWS - 1 && collisionDirection == DataManager.Direction.Down)
@@ -49,6 +42,21 @@ namespace TEMPJAMNAMEREPLACEME
                 || (curTile.GetCol() > DataManager.NUM_COLS - 1))
             {
                 return false;
+            }
+
+            // don't move if it were going to collide with another object that's not a hole
+            TileOccupier newTileOccupierAfterMove = GameManager.Instance.GetOccupierAtLocation(newRow, newCol);
+            if (newTileOccupierAfterMove)
+            {
+                // if we were to collide with something other than a hole, that's not a valid move
+                if (!(newTileOccupierAfterMove is HoleOccupier))
+                {
+                    return false;
+                }
+                else
+                {
+                    newTileOccupierAfterMove.ReactToCollision(this, collisionDirection);
+                }
             }
 
             // valid movement
