@@ -9,6 +9,8 @@ namespace TEMPJAMNAMEREPLACEME
         private TileOccupier player;
         private Coroutine lerpCoroutine = null;
 
+        DataManager.Direction moveDirection = DataManager.Direction.None;
+
         // for now, limit how fast the player can move to avoid any problems like moving diagonally or diagonal lerping
         float lastMovementTime;
         const float TIME_BETWEEN_MOVES = 0.25f;
@@ -27,6 +29,7 @@ namespace TEMPJAMNAMEREPLACEME
                     newCol = player.GetCurTile().GetCol() + 1;
 
                     isValidTile = IsValidTile(newRow, newCol);
+                    moveDirection = DataManager.Direction.Right;
                 }
                 else if (Input.GetKeyDown(KeyCode.A))
                 {
@@ -35,7 +38,7 @@ namespace TEMPJAMNAMEREPLACEME
                     newCol = player.GetCurTile().GetCol() - 1;
 
                     isValidTile = IsValidTile(newRow, newCol);
-
+                    moveDirection = DataManager.Direction.Left;
                 }
                 else if (Input.GetKeyDown(KeyCode.W))
                 {
@@ -44,6 +47,7 @@ namespace TEMPJAMNAMEREPLACEME
                     newCol = player.GetCurTile().GetCol();
 
                     isValidTile = IsValidTile(newRow, newCol);
+                    moveDirection = DataManager.Direction.Up;
                 }
                 else if (Input.GetKeyDown(KeyCode.S))
                 {
@@ -52,6 +56,7 @@ namespace TEMPJAMNAMEREPLACEME
                     newCol = player.GetCurTile().GetCol();
 
                     isValidTile = IsValidTile(newRow, newCol);
+                    moveDirection = DataManager.Direction.Down;
                 }
 
                 if (isValidTile)
@@ -78,18 +83,31 @@ namespace TEMPJAMNAMEREPLACEME
 
         void HandlePlayerMovement(int newRow, int newCol)
         {
-            // if our new tile has no occupier, move there. otherwise handle collision
+            int fromRow = player.GetCurTile().GetRow();
+            int fromCol = player.GetCurTile().GetCol();
+
+            // if our new tile has no occupier, move there. otherwise handle collision between player and occupier
+            bool validMovement = false;
             Tile newTile = GameManager.Instance.GetTileAtLocation(newRow, newCol);
             if(newTile.GetTileOuccupier() == null)
             {
                 // before anything, the player's OLD tile, which is the player's CURRENT tile needs to have its occupier nulled out/removed
                 player.GetCurTile().SetTileOccupier(null);
 
-                // our new tile occupier is the player and the occupier's tile is the new tile
-                // i hate having intertwined references here but, ugh, no time
-                newTile.SetTileOccupier(player);
-                player.SetCurTile(newTile);
+                // keep track of our movement time
+                lastMovementTime = Time.time;
+                validMovement = true;
+            }
+            else
+            {
+                // we collided, meaning we tried to move from our current tile with an existing tile occupier
+                // we block this unless it's the exit tile occupier, in which case we win
+                validMovement = newTile.GetTileOuccupier().ReactToCollision(player, moveDirection);
+            }
 
+            if(validMovement)
+            {
+                // move our player
                 Vector3 newPos = new Vector3(newTile.GetPhysicalXPos(), newTile.GetPhysicalYPos());
 
                 // stop our old lerp if it exists, and lerp to our new position
@@ -100,22 +118,17 @@ namespace TEMPJAMNAMEREPLACEME
 
                 lerpCoroutine = StartCoroutine(HandleMovePlayerPhysical(newPos));
 
-                // keep track of our movement time
-                lastMovementTime = Time.time;
-            }
-            else
-            {
-                // we collided, meaning we tried to move into a tile with an existing tile occupier
-                // we block this unless it's the exit tile occupier, in which case you win
-                //if(newTile.GetTileOuccupier().)
-
+                // our new tile occupier is the player and the occupier's tile is the new tile
+                // i hate having intertwined references here but, ugh, no time
+                newTile.SetTileOccupier(player);
+                player.SetCurTile(newTile);
             }
         }
 
         private IEnumerator HandleMovePlayerPhysical(Vector3 newPos)
         {
             float elapsedTime = 0;
-            float waitTime = 3f;
+            float waitTime = DataManager.LERP_COROUTINE_WAIT_TIME;
 
             while (elapsedTime < waitTime)
             {                
@@ -125,11 +138,6 @@ namespace TEMPJAMNAMEREPLACEME
                 // Yield here
                 yield return null;
             }
-        }
-
-        void HandleOccupierCollision()
-        {
-
         }
     }
 }

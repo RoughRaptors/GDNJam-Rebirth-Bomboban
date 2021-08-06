@@ -587,6 +587,7 @@ MonoBehaviour:
   iceShardObj: {fileID: 4210983404383292475, guid: 9c69710b6d4ead34c8a9d4bdf030ea51, type: 3}
   crackedRockObj: {fileID: 4210983404383292475, guid: 8c4fd30905f43b541b5f4d4a02c9e112, type: 3}
   titaniumBoxObj: {fileID: 4210983404383292475, guid: 2528ba9d6e7143a4bb9c4eaa01f43075, type: 3}
+  wallObj: {fileID: 4210983404383292475, guid: 294b122845167064c88ae5f80beb01db, type: 3}
   holeObj: {fileID: 4649316253035778553, guid: d24da72604e0a5446b81e37f429944cf, type: 3}
   exitObj: {fileID: 4649316253035778553, guid: b84ff998c3a6f1e45b883ff2ca28f786, type: 3}
   level0Btn: {fileID: 607196201}

@@ -11,9 +11,14 @@ namespace TEMPJAMNAMEREPLACEME
             
         }
 
-        public override void ReactToExplode(int fromRow, int fromCol)
+        public override void ReactToExplosion(int fromRow, int fromCol, DataManager.Direction collisionDirection)
         {
 
+        }
+
+        public override bool ReactToCollision(TileOccupier collidingOccupier, DataManager.Direction collisionDirection)
+        {
+            return false;
         }
     }
 }

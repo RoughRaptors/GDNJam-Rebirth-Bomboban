@@ -25,10 +25,6 @@ namespace TEMPJAMNAMEREPLACEME
         public GameObject GetGroundTileObj() { return groundTileObj; }
 
         [SerializeField]
-        GameObject wallTileObj;
-        public GameObject GetWallTileObj() { return wallTileObj; }
-
-        [SerializeField]
         GameObject iceCubeObj;
         public GameObject GetIceCubeObj() { return iceCubeObj; }
 
@@ -43,6 +39,10 @@ namespace TEMPJAMNAMEREPLACEME
         [SerializeField]
         GameObject titaniumBoxObj;
         public GameObject GeTitaniumBoxObj() { return titaniumBoxObj; }
+
+        [SerializeField]
+        GameObject wallObj;
+        public GameObject GetWallObj() { return wallObj; }
 
         [SerializeField]
         GameObject holeObj;
