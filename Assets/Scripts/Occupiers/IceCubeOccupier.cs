@@ -30,6 +30,7 @@ namespace TEMPJAMNAMEREPLACEME
 
         public override bool ReactToCollision(TileOccupier collidingOccupier, DataManager.Direction collisionDirection)
         {
+            /*
             if(collidingOccupier is PlayerOccupier)
             {
                 // do nothing if we collide with player
@@ -52,6 +53,9 @@ namespace TEMPJAMNAMEREPLACEME
             }
 
             return didCollide;
+            */
+
+            return false;
         }
 
         private bool Push(int fromRow, int fromCol, DataManager.Direction direction)
