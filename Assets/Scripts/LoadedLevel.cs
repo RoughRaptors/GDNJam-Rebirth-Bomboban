@@ -176,12 +176,15 @@ namespace TEMPJAMNAMEREPLACEME
             return null;
         }
 
-        public void LoadLevel(int levelIndex)
+        public bool LoadLevel(int levelIndex)
         {
             if(levelIndex <= DataManager.levelTiles.Count && levelIndex <= DataManager.levelOccupiers.Count)
             {
                 InitializeLevel(levelIndex);
+                return true;
             }
+
+            return false;
         }
     }
 }

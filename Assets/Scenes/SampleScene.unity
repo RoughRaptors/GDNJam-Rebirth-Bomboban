@@ -176,14 +176,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4aac13b70ed53ea46ab8fdadfcacc073, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scoreTextMoves: {fileID: 564627856}
+  scoreTextExplodes: {fileID: 1159236701}
   mainMenuObject: {fileID: 1663437896}
   startGameButton: {fileID: 1138511085}
   quitGameButton: {fileID: 1755301247}
   gameOverObject: {fileID: 1011782733}
+  gameOverScoreObject: {fileID: 868429411}
   retryButton: {fileID: 1950657301}
   quitToMenuButton: {fileID: 1234722569}
-  scoreTextMoves: {fileID: 564627856}
-  scoreTextExplodes: {fileID: 1159236701}
+  nextLevelObject: {fileID: 720246235}
+  nextLevelButton: {fileID: 1844186484}
+  scoreText: {fileID: 374290271}
 --- !u!1 &176577573
 GameObject:
   m_ObjectHideFlags: 0
@@ -354,7 +358,7 @@ GameObject:
   - component: {fileID: 374290272}
   - component: {fileID: 374290271}
   m_Layer: 5
-  m_Name: Title Text
+  m_Name: Score Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -376,7 +380,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -150}
+  m_AnchoredPosition: {x: 0, y: -159}
   m_SizeDelta: {x: 850, y: 250}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &374290271
@@ -399,7 +403,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Game Title
+  m_text: Score Text
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -426,8 +430,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 150
-  m_fontSizeBase: 150
+  m_fontSize: 100
+  m_fontSizeBase: 100
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -710,7 +714,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &564627855
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1182,7 +1186,7 @@ GameObject:
   m_Component:
   - component: {fileID: 720246236}
   m_Layer: 5
-  m_Name: Level UI
+  m_Name: Level Complete UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1461,7 +1465,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: -152.13472, y: -58.281265, z: -6.4736786, w: -48.567688}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -1546,7 +1550,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1011782734
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1717,7 +1721,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1159236700
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2495,7 +2499,7 @@ GameObject:
   - component: {fileID: 1728593107}
   - component: {fileID: 1728593106}
   m_Layer: 5
-  m_Name: Start Text
+  m_Name: Next Level Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2540,7 +2544,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Start
+  m_text: Next Level
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2763,7 +2767,7 @@ GameObject:
   - component: {fileID: 1844186485}
   - component: {fileID: 1844186484}
   m_Layer: 5
-  m_Name: Start Button
+  m_Name: Next Level Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

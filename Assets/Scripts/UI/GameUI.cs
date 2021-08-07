@@ -8,6 +8,10 @@ namespace TEMPJAMNAMEREPLACEME
 {
     public class GameUI : MonoBehaviour
     {
+        [Header("HUD Vars")]
+        [SerializeField] private TextMeshProUGUI scoreTextMoves = null;
+        [SerializeField] private TextMeshProUGUI scoreTextExplodes = null;
+
         [Header("Main Menu Vars")]
         [SerializeField] private GameObject mainMenuObject = null;
         [SerializeField] private Button startGameButton = null;
@@ -15,15 +19,14 @@ namespace TEMPJAMNAMEREPLACEME
 
         [Header("Game Over Vars")]
         [SerializeField] private GameObject gameOverObject = null;
+        [SerializeField] private TextMeshProUGUI gameOverScoreObject = null;
         [SerializeField] private Button retryButton = null;
         [SerializeField] private Button quitToMenuButton = null;
-        [SerializeField] private TextMeshProUGUI scoreTextMoves = null;
-        [SerializeField] private TextMeshProUGUI scoreTextExplodes = null;
 
-        // [Header("Level Vars")]
-        // [SerializeField] private GameObject levelObject = null;
-        // [SerializeField] private Button settingsButton = null;
-
+        [Header("Level Vars")]
+        [SerializeField] private GameObject nextLevelObject = null;
+        [SerializeField] private Button nextLevelButton = null;
+        [SerializeField] private TextMeshProUGUI scoreText = null;
 
         private void Start()
         {
@@ -38,18 +41,18 @@ namespace TEMPJAMNAMEREPLACEME
 
         #region Main Menu Methods
 
-        public void ReturnToMainMenu()
+        private void ReturnToMainMenu()
         {
             mainMenuObject.SetActive(true);
             GameManager.Instance.OnDestroyLevelClicked();
         }
 
-        public void HideMainMenu()
+        private void HideMainMenu()
         {
             mainMenuObject.SetActive(false);
         }
 
-        public void QuitGame()
+        private void QuitGame()
         {
             Application.Quit();
         }
@@ -68,13 +71,6 @@ namespace TEMPJAMNAMEREPLACEME
 
         #region Game Over Methods
 
-        // When the player dies call this method.
-        private void HandleGameOver()
-        {
-            gameOverObject.SetActive(true);
-            // show score
-        }
-
         // Needs to be updated if there is more than one level
         private void RetryLevel()
         {
@@ -92,12 +88,34 @@ namespace TEMPJAMNAMEREPLACEME
 
             retryButton.onClick.AddListener(RetryLevel);
             quitToMenuButton.onClick.AddListener(ReturnToMainMenu);
+
+            nextLevelButton.onClick.AddListener(NextLevel);
         }
 
         public void UpdateScores()
         {
-            scoreTextMoves.text = "Num Moves " + GameManager.Instance.GetNumMoves().ToString();
-            scoreTextExplodes.text = "Num Explodes " + GameManager.Instance.GetNumExplodes().ToString();
+            scoreTextMoves.text = "Num Moves: " + GameManager.Instance.GetNumMoves().ToString();
+            scoreTextExplodes.text = "Num Explodes: " + GameManager.Instance.GetNumExplodes().ToString();
+        }
+
+        private void NextLevel()
+        {
+            GameManager.Instance.LoadNextLevel();
+        }
+
+        public void ShowNextLevelScreen(int endingMoves, int endingExplodes)
+        {
+            // first off, did we win? separate screen
+            if(GameManager.Instance.GetCurLevelIndex() == DataManager.levelTiles.Count - 1)
+            {
+                gameOverObject.SetActive(true);
+                gameOverScoreObject.text = "YOU WIN! \n" + "Num Moves: " + endingMoves.ToString() + "\n" + "Num Explodes: " + endingExplodes.ToString();
+            }
+            else
+            {
+                nextLevelObject.SetActive(true);
+                scoreText.text = "Num Moves: " + endingMoves.ToString() + "\n" + "Num Explodes: " + endingExplodes.ToString();
+            }
         }
     }
 }
