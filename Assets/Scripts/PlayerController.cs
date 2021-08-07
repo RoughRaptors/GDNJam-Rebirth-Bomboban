@@ -223,17 +223,16 @@ namespace TEMPJAMNAMEREPLACEME
             // if our new tile has an occupier, explode it
             bool validExplode = false;
             Tile newTile = GameManager.Instance.GetTileAtLocation(explodeRow, explodeCol);
-            if (newTile.GetTileOuccupier() != null)
+            if (newTile.GetTileOuccupier())
             {
-                validExplode = newTile.GetTileOuccupier().ReactToExplosion(fromRow, fromCol, inputDirection);
-                return true;
-            }
-
-            if(validExplode)
-            {
-
-
-                return true;
+                // holes and exits do not react to explosions
+                bool didCollideWithHole = newTile.GetTileOuccupier() is HoleOccupier;
+                bool didCollideWithExit = newTile.GetTileOuccupier() is ExitOccupier;
+                if(!didCollideWithHole && !didCollideWithExit)
+                {
+                    validExplode = newTile.GetTileOuccupier().ReactToExplosion(fromRow, fromCol, inputDirection);
+                    return true;
+                }
             }
 
             return false;
