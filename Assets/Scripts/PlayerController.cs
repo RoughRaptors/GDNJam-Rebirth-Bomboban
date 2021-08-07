@@ -22,7 +22,7 @@ namespace TEMPJAMNAMEREPLACEME
                 bool isValidMoveTile = HandleMovementLogic();
                 if (isValidMoveTile)
                 {
-
+                    GameManager.Instance.IncrementNumMoves();
                 }
                 else
                 {
@@ -129,7 +129,6 @@ namespace TEMPJAMNAMEREPLACEME
             int explodeStartTileCol = player.GetCurTile().GetCol();
             int explodeTileRow = 0;
             int explodeTileCol = 0;
-            bool isValidExplodeTile = false;
             if (Input.GetKeyDown(DataManager.explodeKeybind))
             {
                 // explode in all 4 orthogonal directions, the explosion goes until we hit something or until the edge of the map
@@ -194,6 +193,8 @@ namespace TEMPJAMNAMEREPLACEME
                         }
                     }
                 }
+
+                GameManager.Instance.IncrementNumExplodes();
             }
         }
 

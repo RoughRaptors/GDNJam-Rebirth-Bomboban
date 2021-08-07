@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 /*
  Quick Architecture Overview: 
@@ -56,15 +57,21 @@ namespace TEMPJAMNAMEREPLACEME
         Button level0Btn;
 
         [SerializeField]
-        Button level1Btn;
+        Button destroyLevelsBtn;
 
         [SerializeField]
-        Button destroyLevelsBtn;
+        GameUI gameUI;
 #pragma warning restore CS0649
 
         private LoadedLevel curLevel = null;
         public void SetCurLevel(LoadedLevel newLevel) { curLevel = newLevel; }
         public LoadedLevel GetCurLevel() { return curLevel; }
+
+        private int numMoves;
+        public int GetNumMoves() { return numMoves; }
+
+        private int numExplodes;
+        public int GetNumExplodes() { return numExplodes; }
 
         private void Awake()
         {
@@ -79,9 +86,7 @@ namespace TEMPJAMNAMEREPLACEME
                 curLevel = new LoadedLevel();
             }
 
-            level0Btn.GetComponentInChildren<Text>().text = "Load level 0";
-            level1Btn.GetComponentInChildren<Text>().text = "Load level 1";
-            destroyLevelsBtn.GetComponentInChildren<Text>().text = "Destroy current level";
+            ResetScores();
         }
 
         public void LoadLevel(int levelIndex)
@@ -106,11 +111,6 @@ namespace TEMPJAMNAMEREPLACEME
         public void OnLoadLevel0ButtonClick()
         {
             LoadLevel(0);
-        }
-
-        public void OnLoadLevel1ButtonClick()
-        {
-            LoadLevel(1);
         }
 
         public void OnDestroyLevelClicked()
@@ -150,6 +150,36 @@ namespace TEMPJAMNAMEREPLACEME
             }
 
             return false;
+        }
+
+        private void ResetScores()
+        {
+            numMoves = 0;
+            numExplodes = 0;
+        }
+
+        public void IncrementNumMoves()
+        {
+            ++numMoves;
+            UpdateUI();
+        }
+
+        public void IncrementNumExplodes()
+        {
+            ++numExplodes;
+            UpdateUI();
+        }
+
+        private void UpdateUI()
+        {
+            gameUI.UpdateScores();
+        }
+
+        public void CompleteLevel()
+        {
+            
+
+            ResetScores();
         }
     }
 }

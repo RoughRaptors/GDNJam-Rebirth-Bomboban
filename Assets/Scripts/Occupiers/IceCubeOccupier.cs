@@ -16,7 +16,9 @@ namespace TEMPJAMNAMEREPLACEME
             int startRow = curTile.GetRow();
             int startCol = curTile.GetCol();
 
-            SubtractHealth(1, true);
+            // design change, ice blocks are invulnerable
+            SubtractHealth(0, true);
+            
             bool didExplode = Push(fromRow, fromCol, explosionDirection);
             if(didExplode)
             {
@@ -118,7 +120,9 @@ namespace TEMPJAMNAMEREPLACEME
             if (collisionTileOccupier)
             {
                 collided = true;
-                SubtractHealth(1);
+
+                // design change, ice blocks are invulnerable
+                SubtractHealth(0);
 
                 // if we collided with a hole, destroy both
                 if(collisionTileOccupier is HoleOccupier)
@@ -129,8 +133,15 @@ namespace TEMPJAMNAMEREPLACEME
                     return true;
                 }
 
+                // design change, ice blocks are invulnerable
+                int damageToTake = 1;
+                if(collisionTileOccupier is IceCubeOccupier)
+                {
+                    damageToTake = 0;
+                }
+
                 // we want to keep moving if we destroyed the object, as we replace it by moving on top of it
-                didDestroyCollidingOccupier = collisionTileOccupier.SubtractHealth(1);
+                didDestroyCollidingOccupier = collisionTileOccupier.SubtractHealth(damageToTake);
                 if (!didDestroyCollidingOccupier)
                 {
                     // we need to stop moving, to do this we actually have to reverse calculate to get the new tile
