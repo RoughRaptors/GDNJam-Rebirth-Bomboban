@@ -9,6 +9,8 @@ namespace TEMPJAMNAMEREPLACEME
         private DataManager.OccupierType occupierType;
 
         protected int health;
+        protected bool flaggedForDeath = false;
+        protected TileOccupier collisionObjectToDestroyAfterLERP = null;
         public int GetHealth() { return health; }
 
         protected Tile curTile;
@@ -21,13 +23,23 @@ namespace TEMPJAMNAMEREPLACEME
         public abstract bool ReactToExplosion(int fromRow, int fromCol, DataManager.Direction explosionDirection);
         public abstract bool ReactToCollision(TileOccupier collidingOccupier, DataManager.Direction collisionDirection);
 
-        public bool SubtractHealth(int amount)
+        public bool SubtractHealth(int amount, bool fromExplosion = false)
         {
             health -= amount;
             if (health <= 0)
             {
                 curTile.SetTileOccupier(null);
-                Destroy(this.gameObject);
+
+                // if it's not from an explosion, don't immediately destroy it
+                // wait for the lerp to complete
+                if (!fromExplosion)
+                {
+                    flaggedForDeath = true;
+                }
+                else
+                {
+                    Destroy(this.gameObject);
+                }
 
                 return true;
             }
@@ -35,10 +47,10 @@ namespace TEMPJAMNAMEREPLACEME
             return false;
         }
 
-        protected IEnumerator HandleMovePhysical(Vector3 newPos)
+        protected IEnumerator HandleMovePhysical(Vector3 newPos, int numTilesMoved = 1)
         {
             float elapsedTime = 0;
-            float waitTime = DataManager.LERP_COROUTINE_WAIT_TIME;
+            float waitTime = DataManager.LERP_COROUTINE_WAIT_TIME * numTilesMoved;
 
             while (elapsedTime < waitTime)
             {
@@ -47,6 +59,23 @@ namespace TEMPJAMNAMEREPLACEME
 
                 // Yield here
                 yield return null;
+            }
+
+            if(flaggedForDeath)
+            {
+                Destroy(this.gameObject);
+
+            }
+
+            if (collisionObjectToDestroyAfterLERP)
+            {
+                // if we're destroyed and not replaced, then null out the occupier
+                if (collisionObjectToDestroyAfterLERP == curTile.GetTileOuccupier())
+                {
+                    collisionObjectToDestroyAfterLERP.curTile.SetTileOccupier(null);
+                }
+
+                Destroy(collisionObjectToDestroyAfterLERP.gameObject);
             }
         }
     }

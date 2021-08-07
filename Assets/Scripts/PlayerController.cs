@@ -194,7 +194,7 @@ namespace TEMPJAMNAMEREPLACEME
             lastMovementTime = Time.time;
 
             // if our new tile has an occupier, explode it
-            bool validExplode = true;
+            bool validExplode = false;
             Tile newTile = GameManager.Instance.GetTileAtLocation(explodeRow, explodeCol);
             if (newTile.GetTileOuccupier() != null)
             {
