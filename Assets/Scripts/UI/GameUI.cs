@@ -71,13 +71,11 @@ namespace TEMPJAMNAMEREPLACEME
 
         #region Game Over Methods
 
-        // Needs to be updated if there is more than one level
         private void RetryLevel()
         {
             gameOverObject.SetActive(false);
-            GameManager.Instance.OnLoadLevel0ButtonClick();
+            GameManager.Instance.LoadLevel(GameManager.Instance.GetCurLevelIndex());
         }
-
 
         #endregion
 
