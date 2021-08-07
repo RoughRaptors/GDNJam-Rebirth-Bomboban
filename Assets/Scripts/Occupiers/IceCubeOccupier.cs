@@ -11,7 +11,7 @@ namespace TEMPJAMNAMEREPLACEME
             health = 2;
         }
 
-        public override void ReactToExplosion(int fromRow, int fromCol, DataManager.Direction collisionDirection)
+        public override bool ReactToExplosion(int fromRow, int fromCol, DataManager.Direction explosionDirection)
         {
             /*
             // move in the collision direction until an occupier is hit
@@ -41,6 +41,8 @@ namespace TEMPJAMNAMEREPLACEME
 
             }
             */
+
+            return false;
         }
 
         public override bool ReactToCollision(TileOccupier collidingOccupier, DataManager.Direction collisionDirection)
