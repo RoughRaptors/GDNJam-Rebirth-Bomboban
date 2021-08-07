@@ -64,7 +64,7 @@ namespace TEMPJAMNAMEREPLACEME
             UpdateScores();
 
             HideMainMenu();
-            GameManager.Instance.OnLoadLevel0ButtonClick();
+            GameManager.Instance.LoadLevel(0);
         }
         #endregion
 
