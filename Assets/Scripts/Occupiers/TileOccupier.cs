@@ -6,8 +6,6 @@ namespace TEMPJAMNAMEREPLACEME
 {
     public abstract class TileOccupier : MonoBehaviour
     {
-        private DataManager.OccupierType occupierType;
-
         protected int health;
         protected bool flaggedForDeath = false;
         protected TileOccupier collisionObjectToDestroyAfterLERP = null;
@@ -25,23 +23,27 @@ namespace TEMPJAMNAMEREPLACEME
 
         public bool SubtractHealth(int amount, bool fromExplosion = false)
         {
-            health -= amount;
-            if (health <= 0)
+            // only cracked rock is damageable
+            if(this is CrackedRockOccupier)
             {
-                curTile.SetTileOccupier(null);
-
-                // if it's not from an explosion, don't immediately destroy it
-                // wait for the lerp to complete
-                if (!fromExplosion)
+                health -= amount;
+                if (health <= 0)
                 {
-                    flaggedForDeath = true;
-                }
-                else
-                {
-                    Destroy(this.gameObject);
-                }
+                    curTile.SetTileOccupier(null);
 
-                return true;
+                    // if it's not from an explosion, don't immediately destroy it
+                    // wait for the lerp to complete
+                    if (!fromExplosion)
+                    {
+                        flaggedForDeath = true;
+                    }
+                    else
+                    {
+                        Destroy(this.gameObject);
+                    }
+
+                    return true;
+                }
             }
 
             return false;

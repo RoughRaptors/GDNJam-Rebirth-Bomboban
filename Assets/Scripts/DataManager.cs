@@ -23,10 +23,7 @@ namespace TEMPJAMNAMEREPLACEME
         public const KeyCode moveLeftKeybind = KeyCode.A;
         public const KeyCode moveRightKeybind = KeyCode.D;
 
-        public const KeyCode explodeUpKeybind = KeyCode.UpArrow;
-        public const KeyCode explodeDownKeybind = KeyCode.DownArrow;
-        public const KeyCode explodeLeftKeybind = KeyCode.LeftArrow;
-        public const KeyCode explodeRightKeybind = KeyCode.RightArrow;
+        public const KeyCode explodeKeybind = KeyCode.Space;
 
         public enum Direction
         {
