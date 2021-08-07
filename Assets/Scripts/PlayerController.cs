@@ -43,7 +43,7 @@ namespace TEMPJAMNAMEREPLACEME
                 newCol = player.GetCurTile().GetCol();
                 inputDirection = DataManager.Direction.Up;
 
-                isValidMoveTile = IsValidTile(newRow, newCol);
+                isValidMoveTile = GameManager.Instance.IsValidTile(newRow, newCol);
             }
             else if (Input.GetKeyDown(DataManager.moveDownKeybind))
             {
@@ -52,14 +52,14 @@ namespace TEMPJAMNAMEREPLACEME
                 newCol = player.GetCurTile().GetCol();
                 inputDirection = DataManager.Direction.Down;
 
-                isValidMoveTile = IsValidTile(newRow, newCol);
+                isValidMoveTile = GameManager.Instance.IsValidTile(newRow, newCol);
             }
             else if (Input.GetKeyDown(DataManager.moveLeftKeybind))
             {
                 // moving left
                 newRow = player.GetCurTile().GetRow();
                 newCol = player.GetCurTile().GetCol() - 1;
-                isValidMoveTile = IsValidTile(newRow, newCol);
+                isValidMoveTile = GameManager.Instance.IsValidTile(newRow, newCol);
 
                 inputDirection = DataManager.Direction.Left;
             }
@@ -68,7 +68,7 @@ namespace TEMPJAMNAMEREPLACEME
                 // moving right
                 newRow = player.GetCurTile().GetRow();
                 newCol = player.GetCurTile().GetCol() + 1;
-                isValidMoveTile = IsValidTile(newRow, newCol);
+                isValidMoveTile = GameManager.Instance.IsValidTile(newRow, newCol);
 
                 inputDirection = DataManager.Direction.Right;
             }
@@ -132,7 +132,7 @@ namespace TEMPJAMNAMEREPLACEME
             {
                 explodeTileRow = player.GetCurTile().GetRow() - 1;
                 explodeTileCol = player.GetCurTile().GetCol();
-                isValidExplodeTile = IsValidTile(explodeTileRow, explodeTileCol);
+                isValidExplodeTile = GameManager.Instance.IsValidTile(explodeTileRow, explodeTileCol);
 
                 inputDirection = DataManager.Direction.Up;
             }
@@ -140,7 +140,7 @@ namespace TEMPJAMNAMEREPLACEME
             {
                 explodeTileRow = player.GetCurTile().GetRow() + 1;
                 explodeTileCol = player.GetCurTile().GetCol();
-                isValidExplodeTile = IsValidTile(explodeTileRow, explodeTileCol);
+                isValidExplodeTile = GameManager.Instance.IsValidTile(explodeTileRow, explodeTileCol);
 
                 inputDirection = DataManager.Direction.Down;
             }
@@ -148,7 +148,7 @@ namespace TEMPJAMNAMEREPLACEME
             {
                 explodeTileRow = player.GetCurTile().GetRow();
                 explodeTileCol = player.GetCurTile().GetCol() - 1;
-                isValidExplodeTile = IsValidTile(explodeTileRow, explodeTileCol);
+                isValidExplodeTile = GameManager.Instance.IsValidTile(explodeTileRow, explodeTileCol);
 
                 inputDirection = DataManager.Direction.Left;
             }
@@ -156,7 +156,7 @@ namespace TEMPJAMNAMEREPLACEME
             {
                 explodeTileRow = player.GetCurTile().GetRow();
                 explodeTileCol = player.GetCurTile().GetCol() + 1;
-                isValidExplodeTile = IsValidTile(explodeTileRow, explodeTileCol);
+                isValidExplodeTile = GameManager.Instance.IsValidTile(explodeTileRow, explodeTileCol);
 
                 inputDirection = DataManager.Direction.Right;
             }
@@ -210,16 +210,6 @@ namespace TEMPJAMNAMEREPLACEME
         public void SetPlayerObject(TileOccupier player)
         {
             this.player = player;
-        }
-
-        private bool IsValidTile(int newRow, int newCol)
-        {
-            if (newRow >= 0 && newRow < DataManager.NUM_ROWS && newCol >= 0 && newCol < DataManager.NUM_COLS)
-            {
-                return true;
-            }
-
-            return false;
         }
     }
 }

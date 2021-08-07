@@ -21,12 +21,32 @@ namespace TEMPJAMNAMEREPLACEME
         public abstract bool ReactToExplosion(int fromRow, int fromCol, DataManager.Direction explosionDirection);
         public abstract bool ReactToCollision(TileOccupier collidingOccupier, DataManager.Direction collisionDirection);
 
-        public void SubtractHealth(int amount)
+        public bool SubtractHealth(int amount)
         {
             health -= amount;
-            if(health < 0)
+            if (health <= 0)
             {
-                health = 0;
+                curTile.SetTileOccupier(null);
+                Destroy(this.gameObject);
+
+                return true;
+            }
+
+            return false;
+        }
+
+        protected IEnumerator HandleMovePhysical(Vector3 newPos)
+        {
+            float elapsedTime = 0;
+            float waitTime = DataManager.LERP_COROUTINE_WAIT_TIME;
+
+            while (elapsedTime < waitTime)
+            {
+                transform.position = Vector3.Lerp(transform.position, newPos, (elapsedTime / waitTime));
+                elapsedTime += Time.deltaTime;
+
+                // Yield here
+                yield return null;
             }
         }
     }

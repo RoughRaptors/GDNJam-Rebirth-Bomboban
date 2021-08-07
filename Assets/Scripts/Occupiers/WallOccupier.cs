@@ -13,13 +13,7 @@ namespace TEMPJAMNAMEREPLACEME
 
         public override bool ReactToCollision(TileOccupier collidingOccupier, DataManager.Direction explodeDirection)
         {
-            // do nothing if we collided with player
-            if (collidingOccupier is PlayerOccupier)
-            {
-                return false;
-            }
-
-            return true;
+            return false;
         }
     }
 }
