@@ -23,27 +23,23 @@ namespace TEMPJAMNAMEREPLACEME
 
         public bool SubtractHealth(int amount, bool fromExplosion = false)
         {
-            // only cracked rock is damageable
-            if(this is CrackedRockOccupier)
+            health -= amount;
+            if (health <= 0)
             {
-                health -= amount;
-                if (health <= 0)
+                curTile.SetTileOccupier(null);
+
+                // if it's not from an explosion, don't immediately destroy it
+                // wait for the lerp to complete
+                if (!fromExplosion)
                 {
-                    curTile.SetTileOccupier(null);
-
-                    // if it's not from an explosion, don't immediately destroy it
-                    // wait for the lerp to complete
-                    if (!fromExplosion)
-                    {
-                        flaggedForDeath = true;
-                    }
-                    else
-                    {
-                        Destroy(this.gameObject);
-                    }
-
-                    return true;
+                    flaggedForDeath = true;
                 }
+                else
+                {
+                    Destroy(this.gameObject);
+                }
+
+                return true;
             }
 
             return false;

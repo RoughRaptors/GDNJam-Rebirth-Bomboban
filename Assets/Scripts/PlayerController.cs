@@ -228,14 +228,15 @@ namespace TEMPJAMNAMEREPLACEME
                 // holes and exits do not react to explosions
                 bool didCollideWithHole = newTile.GetTileOuccupier() is HoleOccupier;
                 bool didCollideWithExit = newTile.GetTileOuccupier() is ExitOccupier;
-                if(!didCollideWithHole && !didCollideWithExit)
+                if(didCollideWithHole || didCollideWithExit)
                 {
-                    validExplode = newTile.GetTileOuccupier().ReactToExplosion(fromRow, fromCol, inputDirection);
-                    return true;
+                    return false;
                 }
+
+                validExplode = newTile.GetTileOuccupier().ReactToExplosion(explodeRow, explodeCol, inputDirection);
             }
 
-            return false;
+            return validExplode;
         }
 
         public void SetPlayerObject(TileOccupier player)
