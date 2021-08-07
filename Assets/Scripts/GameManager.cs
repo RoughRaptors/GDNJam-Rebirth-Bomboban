@@ -66,6 +66,8 @@ namespace TEMPJAMNAMEREPLACEME
         private LoadedLevel curLevel = null;
         public void SetCurLevel(LoadedLevel newLevel) { curLevel = newLevel; }
         public LoadedLevel GetCurLevel() { return curLevel; }
+        private int curLevelIndex = 0;
+        public int GetCurLevelIndex() { return curLevelIndex; }
 
         private int numMoves;
         public int GetNumMoves() { return numMoves; }
@@ -86,6 +88,7 @@ namespace TEMPJAMNAMEREPLACEME
                 curLevel = new LoadedLevel();
             }
 
+            curLevelIndex = 0;
             ResetScores();
         }
 
@@ -96,7 +99,16 @@ namespace TEMPJAMNAMEREPLACEME
                 // unload our old one for safety
                 curLevel.DeconstructLevel();
 
-                curLevel.LoadLevel(levelIndex);
+                bool loaded = curLevel.LoadLevel(levelIndex);
+                curLevelIndex = levelIndex;
+            }
+        }
+
+        public void LoadNextLevel()
+        {
+            if (!(curLevel is null))
+            {
+                curLevel.LoadLevel(curLevelIndex + 1);
             }
         }
 
@@ -177,7 +189,9 @@ namespace TEMPJAMNAMEREPLACEME
 
         public void CompleteLevel()
         {
-            
+            int endingMoves = numMoves;
+            int endingExplodes = numExplodes;
+            gameUI.ShowNextLevelScreen(endingMoves, endingExplodes);
 
             ResetScores();
         }
