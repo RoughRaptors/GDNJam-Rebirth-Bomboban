@@ -6,15 +6,24 @@ namespace TEMPJAMNAMEREPLACEME
 {
     public class TitaniumBoxOccupier : TileOccupier
     {
-
-        public override void ReactToExplosion(int fromRow, int fromCol, DataManager.Direction collisionDirection)
+        public override bool ReactToExplosion(int fromRow, int fromCol, DataManager.Direction explosionDirection)
         {
             // do nothing
+            return false;
         }
 
         public override bool ReactToCollision(TileOccupier collidingOccupier, DataManager.Direction collisionDirection)
         {
             // is pushed by the player
+
+            // don't go out of bounds
+            if ((curTile.GetRow() == 0 && collisionDirection == DataManager.Direction.Up)
+                || (curTile.GetRow() == DataManager.NUM_ROWS - 1 && collisionDirection == DataManager.Direction.Down)
+                || (curTile.GetCol() == 0 && collisionDirection == DataManager.Direction.Left)
+                || (curTile.GetCol() > DataManager.NUM_COLS - 1 && collisionDirection == DataManager.Direction.Right))
+            {
+                return false;
+            }
 
             int newRow = curTile.GetRow();
             int newCol = curTile.GetCol();
@@ -33,15 +42,6 @@ namespace TEMPJAMNAMEREPLACEME
             else if (collisionDirection == DataManager.Direction.Right)
             {
                 newCol = newCol + 1;
-            }
-
-            // don't go out of bounds
-            if ((curTile.GetRow() == 0 && collisionDirection == DataManager.Direction.Up)
-                || (curTile.GetRow() == DataManager.NUM_ROWS - 1 && collisionDirection == DataManager.Direction.Down)
-                || (curTile.GetCol() == 0 && collisionDirection == DataManager.Direction.Left)
-                || (curTile.GetCol() > DataManager.NUM_COLS - 1))
-            {
-                return false;
             }
 
             // don't move if it were going to collide with another object that's not a hole
@@ -76,21 +76,6 @@ namespace TEMPJAMNAMEREPLACEME
             }
 
             return true;
-        }
-
-        private IEnumerator HandleMovePhysical(Vector3 newPos)
-        {
-            float elapsedTime = 0;
-            float waitTime = DataManager.LERP_COROUTINE_WAIT_TIME;
-
-            while (elapsedTime < waitTime)
-            {
-                transform.position = Vector3.Lerp(transform.position, newPos, (elapsedTime / waitTime));
-                elapsedTime += Time.deltaTime;
-
-                // Yield here
-                yield return null;
-            }
         }
     }
 }

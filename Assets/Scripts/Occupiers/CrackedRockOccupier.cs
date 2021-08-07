@@ -8,12 +8,19 @@ namespace TEMPJAMNAMEREPLACEME
     {
         void Start()
         {
-            
+            health = 1;
         }
 
-        public override void ReactToExplosion(int fromRow, int fromCol, DataManager.Direction collisionDirection)
+        public override bool ReactToExplosion(int fromRow, int fromCol, DataManager.Direction explosionDirection)
         {
+            health -= 1;
+            if(health <= 0)
+            {
+                curTile.SetTileOccupier(null);
+                Destroy(this.gameObject);
+            }
 
+            return true;
         }
 
         public override bool ReactToCollision(TileOccupier collidingOccupier, DataManager.Direction collisionDirection)

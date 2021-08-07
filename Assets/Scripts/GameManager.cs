@@ -141,5 +141,15 @@ namespace TEMPJAMNAMEREPLACEME
         {
             return curLevel.GetPlayer();
         }
+
+        public bool IsValidTile(int newRow, int newCol)
+        {
+            if (newRow >= 0 && newRow < DataManager.NUM_ROWS && newCol >= 0 && newCol < DataManager.NUM_COLS)
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }

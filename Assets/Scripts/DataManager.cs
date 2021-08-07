@@ -18,6 +18,16 @@ namespace TEMPJAMNAMEREPLACEME
         // ex: GameManager.Instance.GetLevel()[0,0] is the top left physically, so give the center of that square
         public static readonly Vector3 PHYSICAL_START_POS_VEC = new Vector3(-10, 10, 0);
 
+        public const KeyCode moveUpKeybind = KeyCode.W;
+        public const KeyCode moveDownKeybind = KeyCode.S;
+        public const KeyCode moveLeftKeybind = KeyCode.A;
+        public const KeyCode moveRightKeybind = KeyCode.D;
+
+        public const KeyCode explodeUpKeybind = KeyCode.UpArrow;
+        public const KeyCode explodeDownKeybind = KeyCode.DownArrow;
+        public const KeyCode explodeLeftKeybind = KeyCode.LeftArrow;
+        public const KeyCode explodeRightKeybind = KeyCode.RightArrow;
+
         public enum Direction
         {
             None = 0,
@@ -68,12 +78,12 @@ namespace TEMPJAMNAMEREPLACEME
                                                             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
         };
 
-        public static readonly int[,] testLevelOccupiers1 = new int[NUM_ROWS, NUM_COLS] { { 0, 1, 2, 3, 4, 5, 6, 7, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        public static readonly int[,] testLevelOccupiers1 = new int[NUM_ROWS, NUM_COLS] { { 0, 1, 2, 0, 4, 5, 6, 7, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                                                             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                                                            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                                                            { 0, 0, 0, 0, 5, 5, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                                                            { 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                                                            { 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                                                            { 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                                                            { 0, 0, 0, 0, 5, 5, 5, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2 },
+                                                            { 0, 2, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                                                            { 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0 },
                                                             { 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                                                             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                                                             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },

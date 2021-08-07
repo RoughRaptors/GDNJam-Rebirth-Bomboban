@@ -6,25 +6,14 @@ namespace TEMPJAMNAMEREPLACEME
 {
     public class WallOccupier : TileOccupier
     {
-        void Start()
+        public override bool ReactToExplosion(int fromRow, int fromCol, DataManager.Direction explosionDirection)
         {
-
+            return false;
         }
 
-        public override void ReactToExplosion(int fromRow, int fromCol, DataManager.Direction collisionDirection)
+        public override bool ReactToCollision(TileOccupier collidingOccupier, DataManager.Direction explodeDirection)
         {
-
-        }
-
-        public override bool ReactToCollision(TileOccupier collidingOccupier, DataManager.Direction collisionDirection)
-        {
-            // do nothing if we collided with player
-            if (collidingOccupier is PlayerOccupier)
-            {
-                return false;
-            }
-
-            return true;
+            return false;
         }
     }
 }

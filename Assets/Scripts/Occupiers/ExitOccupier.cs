@@ -6,14 +6,9 @@ namespace TEMPJAMNAMEREPLACEME
 {
     public class ExitOccupier : TileOccupier
     {
-        void Start()
+        public override bool ReactToExplosion(int fromRow, int fromCol, DataManager.Direction explosionDirection)
         {
-
-        }
-
-        public override void ReactToExplosion(int fromRow, int fromCol, DataManager.Direction collisionDirection)
-        {
-
+            return false;
         }
 
         public override bool ReactToCollision(TileOccupier collidingOccupier, DataManager.Direction collisionDirection)
