@@ -13,12 +13,16 @@ namespace TEMPJAMNAMEREPLACEME
 
         public override bool ReactToExplosion(int fromRow, int fromCol, DataManager.Direction explosionDirection)
         {
-            SubtractHealth(1);
+            int startRow = curTile.GetRow();
+            int startCol = curTile.GetCol();
+
+            SubtractHealth(1, true);
             bool didExplode = Push(fromRow, fromCol, explosionDirection);
             if(didExplode)
             {
+                int numTilesMoved = Mathf.Abs(startRow - curTile.GetRow()) + Mathf.Abs(startCol - curTile.GetCol());
                 Vector3 newPos = new Vector3(curTile.GetPhysicalXPos(), curTile.GetPhysicalYPos());
-                StartCoroutine(HandleMovePhysical(newPos));
+                StartCoroutine(HandleMovePhysical(newPos, numTilesMoved));
             }
 
             return didExplode;
@@ -26,14 +30,18 @@ namespace TEMPJAMNAMEREPLACEME
 
         public override bool ReactToCollision(TileOccupier collidingOccupier, DataManager.Direction collisionDirection)
         {
+            int startRow = curTile.GetRow();
+            int startCol = curTile.GetCol();
+
             bool didCollide = false;
             if (collidingOccupier is PlayerOccupier)
             {
                 didCollide = Push(collidingOccupier.GetCurTile().GetRow(), collidingOccupier.GetCurTile().GetCol(), collisionDirection);
                 if (didCollide)
                 {
+                    int numTilesMoved = Mathf.Abs(startRow - curTile.GetRow()) + Mathf.Abs(startCol - curTile.GetCol());
                     Vector3 newPos = new Vector3(curTile.GetPhysicalXPos(), curTile.GetPhysicalYPos());
-                    StartCoroutine(HandleMovePhysical(newPos));
+                    StartCoroutine(HandleMovePhysical(newPos, numTilesMoved));
                 }
             }
 
@@ -105,8 +113,8 @@ namespace TEMPJAMNAMEREPLACEME
                 // if we collided with a hole, destroy both
                 if(collisionTileOccupier is HoleOccupier)
                 {
-                    Destroy(this.gameObject);
-                    Destroy(collisionTileOccupier.gameObject);
+                    flaggedForDeath = true;
+                    collisionObjectToDestroyAfterLERP = collisionTileOccupier;
 
                     return true;
                 }
@@ -133,6 +141,11 @@ namespace TEMPJAMNAMEREPLACEME
                     {
                         newCol = newCol - 1;
                     }
+                }
+                else
+                {
+                    // destroy this object at the same time since we collided with it
+                    collisionObjectToDestroyAfterLERP = collisionTileOccupier;
                 }
             }
 

@@ -72,7 +72,7 @@ namespace TEMPJAMNAMEREPLACEME
 
                         // delete our occupier if one exists
                         TileOccupier tileOccupier = level[row, col].GetTileOuccupier();
-                        if (tileOccupier && tileOccupier.gameObject)
+                        if (tileOccupier)
                         {
                             Destroy(tileOccupier.gameObject);
                         }
