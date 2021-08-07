@@ -8,38 +8,31 @@ namespace TEMPJAMNAMEREPLACEME
     {
         public override bool ReactToExplosion(int fromRow, int fromCol, DataManager.Direction explosionDirection)
         {
-            // do nothing
-            return false;
-        }
-
-        public override bool ReactToCollision(TileOccupier collidingOccupier, DataManager.Direction collisionDirection)
-        {
             // is pushed by the player
-
             // don't go out of bounds
-            if ((curTile.GetRow() == 0 && collisionDirection == DataManager.Direction.Up)
-                || (curTile.GetRow() == DataManager.NUM_ROWS - 1 && collisionDirection == DataManager.Direction.Down)
-                || (curTile.GetCol() == 0 && collisionDirection == DataManager.Direction.Left)
-                || (curTile.GetCol() > DataManager.NUM_COLS - 1 && collisionDirection == DataManager.Direction.Right))
+            if ((curTile.GetRow() == 0 && explosionDirection == DataManager.Direction.Up)
+                || (curTile.GetRow() == DataManager.NUM_ROWS - 1 && explosionDirection == DataManager.Direction.Down)
+                || (curTile.GetCol() == 0 && explosionDirection == DataManager.Direction.Left)
+                || (curTile.GetCol() > DataManager.NUM_COLS - 1 && explosionDirection == DataManager.Direction.Right))
             {
                 return false;
             }
 
             int newRow = curTile.GetRow();
             int newCol = curTile.GetCol();
-            if (collisionDirection == DataManager.Direction.Up)
+            if (explosionDirection == DataManager.Direction.Up)
             {
                 newRow = newRow - 1;
             }
-            else if (collisionDirection == DataManager.Direction.Down)
+            else if (explosionDirection == DataManager.Direction.Down)
             {
                 newRow = newRow + 1;
             }
-            else if (collisionDirection == DataManager.Direction.Left)
+            else if (explosionDirection == DataManager.Direction.Left)
             {
                 newCol = newCol - 1;
             }
-            else if (collisionDirection == DataManager.Direction.Right)
+            else if (explosionDirection == DataManager.Direction.Right)
             {
                 newCol = newCol + 1;
             }
@@ -55,13 +48,13 @@ namespace TEMPJAMNAMEREPLACEME
                 }
                 else
                 {
-                    newTileOccupierAfterMove.ReactToCollision(this, collisionDirection);
+                    newTileOccupierAfterMove.ReactToCollision(this, explosionDirection);
                 }
             }
 
             // valid movement
             Tile newTileAfterMove = GameManager.Instance.GetTileAtLocation(newRow, newCol);
-            if(newTileAfterMove)
+            if (newTileAfterMove)
             {
                 // set our occupier's CURRENT tile occupier to null and the NEW tile's occupier to this
                 curTile.SetTileOccupier(null);
@@ -76,6 +69,12 @@ namespace TEMPJAMNAMEREPLACEME
             }
 
             return true;
+        }
+
+        public override bool ReactToCollision(TileOccupier collidingOccupier, DataManager.Direction collisionDirection)
+        {
+            // do nothing
+            return false;
         }
     }
 }

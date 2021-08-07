@@ -30,6 +30,12 @@ namespace TEMPJAMNAMEREPLACEME
 
         public override bool ReactToCollision(TileOccupier collidingOccupier, DataManager.Direction collisionDirection)
         {
+            if(collidingOccupier is PlayerOccupier)
+            {
+                // do nothing if we collide with player
+                return false;
+            }
+
             int startRow = curTile.GetRow();
             int startCol = curTile.GetCol();
 

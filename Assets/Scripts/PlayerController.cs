@@ -123,51 +123,78 @@ namespace TEMPJAMNAMEREPLACEME
             }
         }
 
-        bool HandleExplosionLogic()
+        void HandleExplosionLogic()
         {
-            int explodeTileRow = 0;  
+            int explodeStartTileRow = player.GetCurTile().GetRow();
+            int explodeStartTileCol = player.GetCurTile().GetCol();
+            int explodeTileRow = 0;
             int explodeTileCol = 0;
             bool isValidExplodeTile = false;
-            if (Input.GetKeyDown(DataManager.explodeUpKeybind))
+            if (Input.GetKeyDown(DataManager.explodeKeybind))
             {
-                explodeTileRow = player.GetCurTile().GetRow() - 1;
-                explodeTileCol = player.GetCurTile().GetCol();
-                isValidExplodeTile = GameManager.Instance.IsValidTile(explodeTileRow, explodeTileCol);
+                // explode in all 4 orthogonal directions, the explosion goes until we hit something or until the edge of the map
 
+                // up
                 inputDirection = DataManager.Direction.Up;
-            }
-            else if (Input.GetKeyDown(DataManager.explodeDownKeybind))
-            {
-                explodeTileRow = player.GetCurTile().GetRow() + 1;
-                explodeTileCol = player.GetCurTile().GetCol();
-                isValidExplodeTile = GameManager.Instance.IsValidTile(explodeTileRow, explodeTileCol);
+                for (explodeTileRow = explodeStartTileRow; explodeTileRow >= 0; --explodeTileRow)
+                {
+                    if(GameManager.Instance.IsValidTile(explodeTileRow - 1, explodeStartTileCol))
+                    {
+                        if (HandleExplosion(explodeTileRow - 1, explodeStartTileCol))
+                        {
+                            break;
+                        }
+                    }
+                }
 
+                explodeTileRow = explodeStartTileRow;
+                explodeTileCol = explodeStartTileCol;
+
+                // down
                 inputDirection = DataManager.Direction.Down;
-            }
-            else if (Input.GetKeyDown(DataManager.explodeLeftKeybind))
-            {
-                explodeTileRow = player.GetCurTile().GetRow();
-                explodeTileCol = player.GetCurTile().GetCol() - 1;
-                isValidExplodeTile = GameManager.Instance.IsValidTile(explodeTileRow, explodeTileCol);
+                for (explodeTileRow = explodeStartTileRow; explodeTileRow < DataManager.NUM_ROWS; ++explodeTileRow)
+                {
+                    if (GameManager.Instance.IsValidTile(explodeTileRow + 1, explodeStartTileCol))
+                    {
+                        if (HandleExplosion(explodeTileRow + 1, explodeStartTileCol))
+                        {
+                            break;
+                        }
+                    }
+                }
 
+                explodeTileRow = explodeStartTileRow;
+                explodeTileCol = explodeStartTileCol;
+
+                // left
                 inputDirection = DataManager.Direction.Left;
-            }
-            else if (Input.GetKeyDown(DataManager.explodeRightKeybind))
-            {
-                explodeTileRow = player.GetCurTile().GetRow();
-                explodeTileCol = player.GetCurTile().GetCol() + 1;
-                isValidExplodeTile = GameManager.Instance.IsValidTile(explodeTileRow, explodeTileCol);
+                for (explodeTileCol = explodeStartTileCol; explodeTileCol >= 0; --explodeTileCol)
+                {
+                    if (GameManager.Instance.IsValidTile(explodeStartTileRow, explodeTileCol - 1))
+                    {
+                        if (HandleExplosion(explodeStartTileRow, explodeTileCol - 1))
+                        {
+                            break;
+                        }
+                    }
+                }
 
+                explodeTileRow = explodeStartTileRow;
+                explodeTileCol = explodeStartTileCol;
+
+                // right
                 inputDirection = DataManager.Direction.Right;
+                for (explodeTileCol = explodeStartTileCol; explodeTileCol < DataManager.NUM_COLS; ++explodeTileCol)
+                {
+                    if (GameManager.Instance.IsValidTile(explodeStartTileRow, explodeTileCol + 1))
+                    {
+                        if (HandleExplosion(explodeStartTileRow, explodeTileCol + 1))
+                        {
+                            break;
+                        }
+                    }
+                }
             }
-
-            if(isValidExplodeTile)
-            {
-                HandleExplosion(explodeTileRow, explodeTileCol);
-                return true;
-            }
-
-            return false;
         }
 
         private IEnumerator HandleMovePlayerPhysical(Vector3 newPos)
@@ -185,7 +212,7 @@ namespace TEMPJAMNAMEREPLACEME
             }
         }
 
-        void HandleExplosion(int explodeRow, int explodeCol)
+        bool HandleExplosion(int explodeRow, int explodeCol)
         {
             int fromRow = player.GetCurTile().GetRow();
             int fromCol = player.GetCurTile().GetCol();
@@ -199,12 +226,17 @@ namespace TEMPJAMNAMEREPLACEME
             if (newTile.GetTileOuccupier() != null)
             {
                 validExplode = newTile.GetTileOuccupier().ReactToExplosion(fromRow, fromCol, inputDirection);
+                return true;
             }
 
             if(validExplode)
             {
 
+
+                return true;
             }
+
+            return false;
         }
 
         public void SetPlayerObject(TileOccupier player)
