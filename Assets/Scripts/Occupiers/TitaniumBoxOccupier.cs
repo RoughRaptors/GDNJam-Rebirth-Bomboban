@@ -41,14 +41,19 @@ namespace TEMPJAMNAMEREPLACEME
             TileOccupier newTileOccupierAfterMove = GameManager.Instance.GetOccupierAtLocation(newRow, newCol);
             if (newTileOccupierAfterMove)
             {
-                // if we were to collide with something other than a hole, that's not a valid move
-                if (!(newTileOccupierAfterMove is HoleOccupier))
+                // if we collide with a hole, destroy both
+                if (newTileOccupierAfterMove is HoleOccupier)
                 {
-                    return false;
+                    flaggedForDeath = true;
+                    collisionObjectToDestroyAfterLERP = newTileOccupierAfterMove;
                 }
                 else
                 {
-                    newTileOccupierAfterMove.ReactToCollision(this, explosionDirection);
+                    // if we don't do anything from the explosion, stop
+                    if(!newTileOccupierAfterMove.ReactToCollision(this, explosionDirection))
+                    {
+                        return true;
+                    }
                 }
             }
 

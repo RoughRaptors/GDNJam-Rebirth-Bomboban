@@ -17,11 +17,13 @@ namespace TEMPJAMNAMEREPLACEME
         [SerializeField] private GameObject gameOverObject = null;
         [SerializeField] private Button retryButton = null;
         [SerializeField] private Button quitToMenuButton = null;
-        [SerializeField] private TextMeshProUGUI scoreText = null;
+        [SerializeField] private TextMeshProUGUI scoreTextMoves = null;
+        [SerializeField] private TextMeshProUGUI scoreTextExplodes = null;
 
-       // [Header("Level Vars")]
-       // [SerializeField] private GameObject levelObject = null;
-       // [SerializeField] private Button settingsButton = null;
+        // [Header("Level Vars")]
+        // [SerializeField] private GameObject levelObject = null;
+        // [SerializeField] private Button settingsButton = null;
+
 
         private void Start()
         {
@@ -29,6 +31,9 @@ namespace TEMPJAMNAMEREPLACEME
 
             mainMenuObject.SetActive(true);
             gameOverObject.SetActive(false);
+
+            scoreTextMoves.enabled = false;
+            scoreTextExplodes.enabled = false;
         }
 
         #region Main Menu Methods
@@ -51,6 +56,10 @@ namespace TEMPJAMNAMEREPLACEME
 
         private void StartGame()
         {
+            scoreTextMoves.enabled = true;
+            scoreTextExplodes.enabled = true;
+            UpdateScores();
+
             HideMainMenu();
             GameManager.Instance.OnLoadLevel0ButtonClick();
         }
@@ -85,5 +94,10 @@ namespace TEMPJAMNAMEREPLACEME
             quitToMenuButton.onClick.AddListener(ReturnToMainMenu);
         }
 
+        public void UpdateScores()
+        {
+            scoreTextMoves.text = "Num Moves " + GameManager.Instance.GetNumMoves().ToString();
+            scoreTextExplodes.text = "Num Explodes " + GameManager.Instance.GetNumExplodes().ToString();
+        }
     }
 }

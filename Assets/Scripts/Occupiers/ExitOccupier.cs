@@ -16,7 +16,7 @@ namespace TEMPJAMNAMEREPLACEME
             if (collidingOccupier is PlayerOccupier)
             {
                 // we win
-                
+                GameManager.Instance.CompleteLevel();
 
                 return true;
             }
