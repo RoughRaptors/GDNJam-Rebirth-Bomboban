@@ -8,54 +8,88 @@ namespace TEMPJAMNAMEREPLACEME
     {
         // the internal representation of the board
         Tile[,] level = new Tile[DataManager.NUM_ROWS, DataManager.NUM_COLS];
-        public Tile[,] GetLevel() { return level; }
+
+        public Tile[,] GetLevel()
+        {
+            return level;
+        }
 
         TileOccupier player;
-        public TileOccupier GetPlayer() { return player; }
+
+        public TileOccupier GetPlayer()
+        {
+            return player;
+        }
 
         // initializes all of the individual tiles
-        void InitializeLevel(int levelIndex)
+        void InitializeLevel(OccupierType[,] levelOccupiers)
         {
+            int levelHeight = levelOccupiers.GetLength(0);
+            int levelWidth = levelOccupiers.GetLength(1);
             // create each of our tiles
-            for (int row = 0; row < DataManager.NUM_ROWS; ++row)
+            for (int row = 0; row < levelHeight; ++row)
             {
-                for (int col = 0; col < DataManager.NUM_COLS; ++col)
+                for (int col = 0; col < levelWidth; ++col)
                 {
+                    var newTile = CreateTile(row, col);
+
+                    OccupierType occupierValue = levelOccupiers[row, col];
                     // where are we in the game space?
                     Vector3 physicalPiecePos = GetGameSpacePosFromRowCol(row, col);
+                    TileOccupier occupier = InstantiateOccupier(occupierValue, row, col);
 
-                    // instantiate our tile
-                    GameObject tileObj = GetTileObjectForLevel(row, col, levelIndex);
-                    if (tileObj)
-                    {
-                        GameObject newTileObj = Instantiate(tileObj);
-                        Tile newTile = newTileObj.GetComponent<Tile>();
-                        newTile.InitializeData(row, col, physicalPiecePos.x, physicalPiecePos.y);
+                    AssignOccupier(newTile, occupier, physicalPiecePos);
 
-                        // instantiate our occupier, if we have one
-                        GameObject occupierObj = GetOccupierObjectForLevel(row, col, levelIndex);
-                        if (occupierObj)
-                        {
-                            GameObject newOccupierObj = Instantiate(occupierObj);
-                            TileOccupier newOccupier = newOccupierObj.GetComponent<TileOccupier>();
-                            if (!(newOccupier is null))
-                            {
-                                if (newOccupier.GetComponent<PlayerController>())
-                                {                                    
-                                    player = newOccupier;
-                                    newOccupier.GetComponent<PlayerController>().SetPlayerObject(player);
-                                }
-                                
-                                newTile.SetTileOccupier(newOccupier);
-                                newOccupier.SetCurTile(newTile);
-                                newOccupier.gameObject.transform.position = physicalPiecePos;
-                            }
-                        }
-
-                        level[row, col] = newTile;
-                    }
+                    level[row, col] = newTile;
                 }
             }
+        }
+
+        private void AssignOccupier(Tile newTile, TileOccupier occupier, Vector3 physicalPiecePos)
+        {
+            if (occupier == null)
+                return;
+            TryRegisterPlayerOccupier(occupier);
+
+            newTile.SetTileOccupier(occupier);
+            occupier.SetCurTile(newTile);
+        }
+
+        private void TryRegisterPlayerOccupier(TileOccupier occupier)
+        {
+            if (occupier.GetComponent<PlayerController>())
+            {
+                player = occupier;
+                occupier.GetComponent<PlayerController>().SetPlayerObject(player);
+            }
+        }
+
+        private TileOccupier InstantiateOccupier(OccupierType occupierValue, int row, int col)
+        {
+            // instantiate our occupier, if we have one
+            GameObject occupierObj = GetOccupierObjectForLevel(occupierValue);
+
+            if (occupierObj)
+            {
+                GameObject newOccupierObj = Instantiate(occupierObj);
+                Vector3 physicalPiecePos = GetGameSpacePosFromRowCol(row, col);
+                newOccupierObj.transform.position = physicalPiecePos;
+                return newOccupierObj.GetComponent<TileOccupier>();
+            }
+
+            return null;
+        }
+
+        private Tile CreateTile(int row, int col)
+        {
+            // where are we in the game space?
+            Vector3 physicalPiecePos = GetGameSpacePosFromRowCol(row, col);
+            // instantiate our tile
+            GameObject tileObj = GameManager.Instance.GetGroundTileObj();
+            GameObject newTileObj = Instantiate(tileObj);
+            Tile newTile = newTileObj.GetComponent<Tile>();
+            newTile.InitializeData(row, col, physicalPiecePos.x, physicalPiecePos.y);
+            return newTile;
         }
 
         public void DeconstructLevel()
@@ -83,71 +117,39 @@ namespace TEMPJAMNAMEREPLACEME
             //Destroy(this);
         }
 
-        public GameObject GetTileObjectForLevel(int row, int col, int levelIndex)
+        private GameObject GetOccupierObjectForLevel(OccupierType occupierType)
         {
-            // not a level
-            if (levelIndex >= DataManager.levelTiles.Count)
+            if (occupierType == OccupierType.None)
             {
                 return null;
             }
-
-            DataManager.TileType tileType = (DataManager.TileType)DataManager.levelTiles[levelIndex][row, col];
-            if(tileType == DataManager.TileType.Ground)
-            {
-                return GameManager.Instance.GetGroundTileObj();
-            }
-
-            return null;
-        }
-
-        public GameObject GetOccupierObjectForLevel(int row, int col, int levelIndex)
-        {
-            // not a level
-            if(levelIndex >= DataManager.levelOccupiers.Count)
-            {
-                return null;
-            }
-
-            DataManager.OccupierType occupierType = (DataManager.OccupierType)DataManager.levelOccupiers[levelIndex][row, col];
-            if (occupierType == DataManager.OccupierType.None)
-            {
-                // nothing
-            }
-            else if (occupierType == DataManager.OccupierType.Player)
+            else if (occupierType == OccupierType.Player)
             {
                 return GameManager.Instance.GetPlayerObj();
             }
-            else if(occupierType == DataManager.OccupierType.IceCube)
+            else if (occupierType == OccupierType.IceCube)
             {
                 return GameManager.Instance.GetIceCubeObj();
             }
-            else if (occupierType == DataManager.OccupierType.IceShard)
-            {
-                return GameManager.Instance.GetIceShardObj();
-            }
-            else if (occupierType == DataManager.OccupierType.CrackedRock)
+            else if (occupierType == OccupierType.CrackedRock)
             {
                 return GameManager.Instance.GetCrackedRockObj();
             }
-            else if (occupierType == DataManager.OccupierType.TitaniumBox)
+            else if (occupierType == OccupierType.TitaniumBox)
             {
                 return GameManager.Instance.GeTitaniumBoxObj();
             }
-            else if (occupierType == DataManager.OccupierType.Wall)
+            else if (occupierType == OccupierType.Wall)
             {
                 return GameManager.Instance.GetWallObj();
             }
-            else if (occupierType == DataManager.OccupierType.Hole)
+            else if (occupierType == OccupierType.Hole)
             {
                 return GameManager.Instance.GeHoleObj();
             }
-            else if (occupierType == DataManager.OccupierType.Exit)
+            else if (occupierType == OccupierType.Exit)
             {
                 return GameManager.Instance.GetExitObj();
-            }
-            else
-            {
-                Debug.Log("Invalid occupier type on (" + row.ToString() + ", " + col.ToString() + ")");
             }
 
             return null;
@@ -166,21 +168,12 @@ namespace TEMPJAMNAMEREPLACEME
             return retVec;
         }
 
-        public TileOccupier GetTileOccupierAtPosition(int row, int col)
-        {
-            if (row < DataManager.NUM_ROWS && col < DataManager.NUM_COLS)
-            {
-                return level[row, col].GetTileOuccupier();
-            }
-
-            return null;
-        }
-
         public bool LoadLevel(int levelIndex)
         {
-            if(levelIndex <= DataManager.levelTiles.Count && levelIndex <= DataManager.levelOccupiers.Count)
+            if (levelIndex <= DataManager.levelOccupiers.Count)
             {
-                InitializeLevel(levelIndex);
+                var levelOccupiers = DataManager.levelOccupiers[levelIndex];
+                InitializeLevel(levelOccupiers);
                 return true;
             }
 
