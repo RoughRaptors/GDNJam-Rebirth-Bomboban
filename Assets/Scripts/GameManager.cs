@@ -201,5 +201,10 @@ namespace TEMPJAMNAMEREPLACEME
         {
             return curLevel.level.GetLength(1);
         }
+
+        public void ResetCurrentLevel()
+        {
+            LoadLevel(curLevelIndex);
+        }
     }
 }
