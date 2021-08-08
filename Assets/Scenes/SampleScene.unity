@@ -1280,7 +1280,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Game Title
+  m_text: Bomboban
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1698,8 +1698,6 @@ MonoBehaviour:
   wallObj: {fileID: 4210983404383292475, guid: 294b122845167064c88ae5f80beb01db, type: 3}
   holeObj: {fileID: 4649316253035778553, guid: d24da72604e0a5446b81e37f429944cf, type: 3}
   exitObj: {fileID: 4649316253035778553, guid: b84ff998c3a6f1e45b883ff2ca28f786, type: 3}
-  level0Btn: {fileID: 607196201}
-  destroyLevelsBtn: {fileID: 1985509157}
   gameUI: {fileID: 76000375}
 --- !u!4 &927561034
 Transform:
@@ -2623,7 +2621,10 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Move: WASD
 
-    Rebirth (Explode in all directions): Space Bar'
+    Rebirth (Explode in all 4 directions): Space Bar
+
+    Reset
+    Level : R'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
