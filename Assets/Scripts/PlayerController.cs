@@ -45,7 +45,7 @@ namespace TEMPJAMNAMEREPLACEME
             int newRow = 0;
             int newCol = 0;
             bool isValidMoveTile = false;
-            if (Input.GetKeyDown(moveUpKeybind))
+            if (Input.GetKey(moveUpKeybind))
             {
                 // moving up
                 newRow = player.GetCurTile().GetRow() - 1;
@@ -54,7 +54,7 @@ namespace TEMPJAMNAMEREPLACEME
 
                 isValidMoveTile = GameManager.Instance.IsValidTile(newRow, newCol);
             }
-            else if (Input.GetKeyDown(moveDownKeybind))
+            else if (Input.GetKey(moveDownKeybind))
             {
                 // moving down
                 newRow = player.GetCurTile().GetRow() + 1;
@@ -63,7 +63,7 @@ namespace TEMPJAMNAMEREPLACEME
 
                 isValidMoveTile = GameManager.Instance.IsValidTile(newRow, newCol);
             }
-            else if (Input.GetKeyDown(moveLeftKeybind))
+            else if (Input.GetKey(moveLeftKeybind))
             {
                 // moving left
                 newRow = player.GetCurTile().GetRow();
@@ -72,7 +72,7 @@ namespace TEMPJAMNAMEREPLACEME
 
                 inputDirection = DataManager.Direction.Left;
             }
-            else if (Input.GetKeyDown(moveRightKeybind))
+            else if (Input.GetKey(moveRightKeybind))
             {
                 // moving right
                 newRow = player.GetCurTile().GetRow();
