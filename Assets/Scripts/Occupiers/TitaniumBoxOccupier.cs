@@ -9,14 +9,6 @@ namespace TEMPJAMNAMEREPLACEME
         public override bool ReactToExplosion(int fromRow, int fromCol, DataManager.Direction explosionDirection)
         {
             // is pushed by the player
-            // don't go out of bounds
-            if ((curTile.GetRow() == 0 && explosionDirection == DataManager.Direction.Up)
-                || (curTile.GetRow() == DataManager.NUM_ROWS - 1 && explosionDirection == DataManager.Direction.Down)
-                || (curTile.GetCol() == 0 && explosionDirection == DataManager.Direction.Left)
-                || (curTile.GetCol() > DataManager.NUM_COLS - 1 && explosionDirection == DataManager.Direction.Right))
-            {
-                return false;
-            }
 
             int newRow = curTile.GetRow();
             int newCol = curTile.GetCol();

@@ -5,9 +5,6 @@ namespace TEMPJAMNAMEREPLACEME
 {
     public class DataManager
     {
-        public const int NUM_ROWS = 20;
-        public const int NUM_COLS = 20;
-
         // the distance between tiles
         public const float DISTANCE_BETWEEN_TILES = 1.0f;
 
@@ -59,7 +56,6 @@ namespace TEMPJAMNAMEREPLACEME
 #........#
 #...R....#
 ##########");
-
             AddLevel(
                 @"##########
 ##......##

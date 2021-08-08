@@ -108,7 +108,8 @@ namespace TEMPJAMNAMEREPLACEME
         {
             if (!(curLevel is null))
             {
-                curLevel.LoadLevel(curLevelIndex + 1);
+                curLevelIndex++;
+                curLevel.LoadLevel(curLevelIndex);
             }
         }
 
@@ -132,31 +133,35 @@ namespace TEMPJAMNAMEREPLACEME
 
         public Tile GetTileAtLocation(int row, int col)
         {
-            if (row >= 0 && row < DataManager.NUM_ROWS && col >= 0 && col < DataManager.NUM_COLS)
+            var level = curLevel.level;
+            var rowQty = level.GetLength(0);
+            var colsQty = level.GetLength(1);
+            if (row >= 0 && row < rowQty && col >= 0 && col < colsQty)
             {
-                return curLevel.GetLevel()[row, col];
+                return level[row, col];
             }
 
             return null;
         }
         public TileOccupier GetOccupierAtLocation(int row, int col)
         {
-            if (row >= 0 && row < DataManager.NUM_ROWS && col >= 0 && col < DataManager.NUM_COLS)
+            var level = curLevel.level;
+            var rowQty = level.GetLength(0);
+            var colsQty = level.GetLength(1);
+            if (row >= 0 && row < rowQty && col >= 0 && col < colsQty)
             {
-                return curLevel.GetLevel()[row, col].GetTileOuccupier();
+                return level[row, col].GetTileOuccupier();
             }
 
             return null;
         }
 
-        public TileOccupier GetPlayer()
-        {
-            return curLevel.GetPlayer();
-        }
-
         public bool IsValidTile(int newRow, int newCol)
         {
-            if (newRow >= 0 && newRow < DataManager.NUM_ROWS && newCol >= 0 && newCol < DataManager.NUM_COLS)
+            var level = curLevel.level;
+            var rowQty = level.GetLength(0);
+            var colsQty = level.GetLength(1);
+            if (newRow >= 0 && newRow < rowQty && newCol >= 0 && newCol < colsQty)
             {
                 return true;
             }
@@ -194,6 +199,16 @@ namespace TEMPJAMNAMEREPLACEME
             gameUI.ShowNextLevelScreen(endingMoves, endingExplodes);
 
             ResetScores();
+        }
+
+        public int GetCurLevelRowCount()
+        {
+            return curLevel.level.GetLength(0);
+        }
+
+        public int GetCurLevelColCount()
+        {
+            return curLevel.level.GetLength(1);
         }
     }
 }

@@ -16,11 +16,8 @@ namespace TEMPJAMNAMEREPLACEME
             int startRow = curTile.GetRow();
             int startCol = curTile.GetCol();
 
-            // design change, ice blocks are invulnerable
-            SubtractHealth(0, true);
-            
             bool didExplode = Push(fromRow, fromCol, explosionDirection);
-            if(didExplode)
+            if (didExplode)
             {
                 int numTilesMoved = Mathf.Abs(startRow - curTile.GetRow()) + Mathf.Abs(startCol - curTile.GetCol());
                 Vector3 newPos = new Vector3(curTile.GetPhysicalXPos(), curTile.GetPhysicalYPos());
@@ -64,9 +61,11 @@ namespace TEMPJAMNAMEREPLACEME
         {
             // don't go out of bounds
             if ((curTile.GetRow() == 0 && direction == DataManager.Direction.Up)
-                || (curTile.GetRow() == DataManager.NUM_ROWS - 1 && direction == DataManager.Direction.Down)
+                || (curTile.GetRow() == GameManager.Instance.GetCurLevelRowCount() - 1 &&
+                    direction == DataManager.Direction.Down)
                 || (curTile.GetCol() == 0 && direction == DataManager.Direction.Left)
-                || (curTile.GetCol() > DataManager.NUM_COLS - 1) && direction == DataManager.Direction.Right)
+                || (curTile.GetCol() > GameManager.Instance.GetCurLevelColCount() - 1) &&
+                direction == DataManager.Direction.Right)
             {
                 return false;
             }
@@ -115,7 +114,7 @@ namespace TEMPJAMNAMEREPLACEME
             bool didDestroyCollidingOccupier = false;
 
             int newRow = occupierRow;
-            int newCol = occupierCol;            
+            int newCol = occupierCol;
             TileOccupier collisionTileOccupier = GameManager.Instance.GetOccupierAtLocation(occupierRow, occupierCol);
             if (collisionTileOccupier)
             {
@@ -125,7 +124,7 @@ namespace TEMPJAMNAMEREPLACEME
                 SubtractHealth(0);
 
                 // if we collided with a hole, destroy both
-                if(collisionTileOccupier is HoleOccupier)
+                if (collisionTileOccupier is HoleOccupier)
                 {
                     flaggedForDeath = true;
                     collisionObjectToDestroyAfterLERP = collisionTileOccupier;
@@ -135,38 +134,28 @@ namespace TEMPJAMNAMEREPLACEME
 
                 // design change, ice blocks are invulnerable
                 int damageToTake = 1;
-                if(collisionTileOccupier is IceCubeOccupier)
+                if (collisionTileOccupier is IceCubeOccupier)
                 {
                     damageToTake = 0;
                 }
-
-                // we want to keep moving if we destroyed the object, as we replace it by moving on top of it
-                didDestroyCollidingOccupier = collisionTileOccupier.SubtractHealth(damageToTake);
-                if (!didDestroyCollidingOccupier)
+                
+                // we need to stop moving, to do this we actually have to reverse calculate to get the new tile
+                // these directions are intentionally reversed to backtrack from our direction
+                if (direction == DataManager.Direction.Up)
                 {
-                    // we need to stop moving, to do this we actually have to reverse calculate to get the new tile
-                    // these directions are intentionally reversed to backtrack from our direction
-                    if (direction == DataManager.Direction.Up)
-                    {
-                        newRow = newRow + 1;
-                    }
-                    else if (direction == DataManager.Direction.Down)
-                    {
-                        newRow = newRow - 1;
-                    }
-                    else if (direction == DataManager.Direction.Left)
-                    {
-                        newCol = newCol + 1;
-                    }
-                    else if (direction == DataManager.Direction.Right)
-                    {
-                        newCol = newCol - 1;
-                    }
+                    newRow = newRow + 1;
                 }
-                else
+                else if (direction == DataManager.Direction.Down)
                 {
-                    // destroy this object at the same time since we collided with it
-                    collisionObjectToDestroyAfterLERP = collisionTileOccupier;
+                    newRow = newRow - 1;
+                }
+                else if (direction == DataManager.Direction.Left)
+                {
+                    newCol = newCol + 1;
+                }
+                else if (direction == DataManager.Direction.Right)
+                {
+                    newCol = newCol - 1;
                 }
             }
 
@@ -178,7 +167,7 @@ namespace TEMPJAMNAMEREPLACEME
             }
 
             // if we collided or the new occupier was destroyed, stop moving, otherwise keep going until we hit something
-            if(collided || didDestroyCollidingOccupier)
+            if (collided || didDestroyCollidingOccupier)
             {
                 return true;
             }
