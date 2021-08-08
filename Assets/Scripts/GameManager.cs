@@ -54,18 +54,10 @@ namespace TEMPJAMNAMEREPLACEME
         public GameObject GetExitObj() { return exitObj; }
 
         [SerializeField]
-        Button level0Btn;
-
-        [SerializeField]
-        Button destroyLevelsBtn;
-
-        [SerializeField]
         GameUI gameUI;
 #pragma warning restore CS0649
 
-        private LoadedLevel curLevel = null;
-        public void SetCurLevel(LoadedLevel newLevel) { curLevel = newLevel; }
-        public LoadedLevel GetCurLevel() { return curLevel; }
+        private LoadedLevel curLevel;
         private int curLevelIndex = 0;
         public int GetCurLevelIndex() { return curLevelIndex; }
 
@@ -133,9 +125,9 @@ namespace TEMPJAMNAMEREPLACEME
 
         public Tile GetTileAtLocation(int row, int col)
         {
-            var level = curLevel.level;
-            var rowQty = level.GetLength(0);
-            var colsQty = level.GetLength(1);
+            Tile[,] level = curLevel.level;
+            int rowQty = GetCurLevelRowCount();
+            int colsQty = GetCurLevelColCount();
             if (row >= 0 && row < rowQty && col >= 0 && col < colsQty)
             {
                 return level[row, col];
@@ -145,9 +137,9 @@ namespace TEMPJAMNAMEREPLACEME
         }
         public TileOccupier GetOccupierAtLocation(int row, int col)
         {
-            var level = curLevel.level;
-            var rowQty = level.GetLength(0);
-            var colsQty = level.GetLength(1);
+            Tile[,] level = curLevel.level;
+            int rowQty = GetCurLevelRowCount();
+            int colsQty = GetCurLevelColCount();
             if (row >= 0 && row < rowQty && col >= 0 && col < colsQty)
             {
                 return level[row, col].GetTileOuccupier();
@@ -158,9 +150,8 @@ namespace TEMPJAMNAMEREPLACEME
 
         public bool IsValidTile(int newRow, int newCol)
         {
-            var level = curLevel.level;
-            var rowQty = level.GetLength(0);
-            var colsQty = level.GetLength(1);
+            int rowQty = GetCurLevelRowCount();
+            int colsQty = GetCurLevelColCount();
             if (newRow >= 0 && newRow < rowQty && newCol >= 0 && newCol < colsQty)
             {
                 return true;
