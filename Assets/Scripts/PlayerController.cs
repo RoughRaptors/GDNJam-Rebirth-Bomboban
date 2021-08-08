@@ -6,6 +6,14 @@ namespace TEMPJAMNAMEREPLACEME
 {
     public class PlayerController : MonoBehaviour
     {
+        public const KeyCode moveUpKeybind = KeyCode.W;
+        public const KeyCode moveDownKeybind = KeyCode.S;
+        public const KeyCode moveLeftKeybind = KeyCode.A;
+        public const KeyCode moveRightKeybind = KeyCode.D;
+        
+        public const KeyCode explodeKeybind = KeyCode.Space;
+        public const KeyCode quickResetKeybind = KeyCode.R;
+        
         private TileOccupier player;
         private Coroutine lerpCoroutine = null;
 
@@ -27,6 +35,7 @@ namespace TEMPJAMNAMEREPLACEME
                 else
                 {
                     HandleExplosionLogic();
+                    HandleQuickReset();
                 }
             }
         }
@@ -36,7 +45,7 @@ namespace TEMPJAMNAMEREPLACEME
             int newRow = 0;
             int newCol = 0;
             bool isValidMoveTile = false;
-            if (Input.GetKeyDown(DataManager.moveUpKeybind))
+            if (Input.GetKeyDown(moveUpKeybind))
             {
                 // moving up
                 newRow = player.GetCurTile().GetRow() - 1;
@@ -45,7 +54,7 @@ namespace TEMPJAMNAMEREPLACEME
 
                 isValidMoveTile = GameManager.Instance.IsValidTile(newRow, newCol);
             }
-            else if (Input.GetKeyDown(DataManager.moveDownKeybind))
+            else if (Input.GetKeyDown(moveDownKeybind))
             {
                 // moving down
                 newRow = player.GetCurTile().GetRow() + 1;
@@ -54,7 +63,7 @@ namespace TEMPJAMNAMEREPLACEME
 
                 isValidMoveTile = GameManager.Instance.IsValidTile(newRow, newCol);
             }
-            else if (Input.GetKeyDown(DataManager.moveLeftKeybind))
+            else if (Input.GetKeyDown(moveLeftKeybind))
             {
                 // moving left
                 newRow = player.GetCurTile().GetRow();
@@ -63,7 +72,7 @@ namespace TEMPJAMNAMEREPLACEME
 
                 inputDirection = DataManager.Direction.Left;
             }
-            else if (Input.GetKeyDown(DataManager.moveRightKeybind))
+            else if (Input.GetKeyDown(moveRightKeybind))
             {
                 // moving right
                 newRow = player.GetCurTile().GetRow();
@@ -129,7 +138,7 @@ namespace TEMPJAMNAMEREPLACEME
             int explodeStartTileCol = player.GetCurTile().GetCol();
             int explodeTileRow;
             int explodeTileCol;
-            if (Input.GetKeyDown(DataManager.explodeKeybind))
+            if (Input.GetKeyDown(explodeKeybind))
             {
                 // explode in all 4 orthogonal directions, the explosion goes until we hit something or until the edge of the map
 
@@ -190,6 +199,12 @@ namespace TEMPJAMNAMEREPLACEME
 
                 GameManager.Instance.IncrementNumExplodes();
             }
+        }
+        
+        private void HandleQuickReset()
+        {
+            if (Input.GetKeyDown(quickResetKeybind))
+                GameManager.Instance.ResetCurrentLevel();
         }
 
         private IEnumerator HandleMovePlayerPhysical(Vector3 newPos)

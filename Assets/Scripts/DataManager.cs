@@ -14,13 +14,6 @@ namespace TEMPJAMNAMEREPLACEME
         // ex: GameManager.Instance.GetLevel()[0,0] is the top left physically, so give the center of that square
         public static readonly Vector3 PHYSICAL_START_POS_VEC = new Vector3(-10, 10, 0);
 
-        public const KeyCode moveUpKeybind = KeyCode.W;
-        public const KeyCode moveDownKeybind = KeyCode.S;
-        public const KeyCode moveLeftKeybind = KeyCode.A;
-        public const KeyCode moveRightKeybind = KeyCode.D;
-
-        public const KeyCode explodeKeybind = KeyCode.Space;
-
         public enum Direction
         {
             None = 0,
