@@ -13,7 +13,8 @@ namespace TEMPJAMNAMEREPLACEME
 
         public override bool ReactToExplosion(int fromRow, int fromCol, DataManager.Direction explosionDirection)
         {
-            return SubtractHealth(1, true);
+            return true;
+            //return SubtractHealth(1, true);
         }
 
         public override bool ReactToCollision(TileOccupier collidingOccupier, DataManager.Direction explodeDirection)

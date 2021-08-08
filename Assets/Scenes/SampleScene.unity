@@ -671,8 +671,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Ice Cube: 2 HP. Slides until collision. Both objects take 1 damage.\n    
-    Titanium Box: Pushable\n\n                        Wall: 1 HP"
+  m_text: "Ice Cube: Slides until collision. Other             object takes 1 damage.\n    
+    Titanium Box: Pushable\n\n                        Wall: 1 HP\n              blocks
+    explosions"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -735,7 +736,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -46.062355, y: -53.754883, z: -342.74655, w: -245.73653}
+  m_margin: {x: -46.06228, y: -53.754883, z: -342.74655, w: -245.73653}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
