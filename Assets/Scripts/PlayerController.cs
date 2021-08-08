@@ -127,8 +127,8 @@ namespace TEMPJAMNAMEREPLACEME
         {
             int explodeStartTileRow = player.GetCurTile().GetRow();
             int explodeStartTileCol = player.GetCurTile().GetCol();
-            int explodeTileRow = 0;
-            int explodeTileCol = 0;
+            int explodeTileRow;
+            int explodeTileCol;
             if (Input.GetKeyDown(DataManager.explodeKeybind))
             {
                 // explode in all 4 orthogonal directions, the explosion goes until we hit something or until the edge of the map
@@ -146,12 +146,11 @@ namespace TEMPJAMNAMEREPLACEME
                     }
                 }
 
-                explodeTileRow = explodeStartTileRow;
-                explodeTileCol = explodeStartTileCol;
-
                 // down
                 inputDirection = DataManager.Direction.Down;
-                for (explodeTileRow = explodeStartTileRow; explodeTileRow < DataManager.NUM_ROWS; ++explodeTileRow)
+                var rowCount = GameManager.Instance.GetCurLevelRowCount();
+
+                for (explodeTileRow = explodeStartTileRow; explodeTileRow < rowCount; ++explodeTileRow)
                 {
                     if (GameManager.Instance.IsValidTile(explodeTileRow + 1, explodeStartTileCol))
                     {
@@ -161,9 +160,6 @@ namespace TEMPJAMNAMEREPLACEME
                         }
                     }
                 }
-
-                explodeTileRow = explodeStartTileRow;
-                explodeTileCol = explodeStartTileCol;
 
                 // left
                 inputDirection = DataManager.Direction.Left;
@@ -178,12 +174,10 @@ namespace TEMPJAMNAMEREPLACEME
                     }
                 }
 
-                explodeTileRow = explodeStartTileRow;
-                explodeTileCol = explodeStartTileCol;
-
+                int colCount = GameManager.Instance.GetCurLevelColCount();
                 // right
                 inputDirection = DataManager.Direction.Right;
-                for (explodeTileCol = explodeStartTileCol; explodeTileCol < DataManager.NUM_COLS; ++explodeTileCol)
+                for (explodeTileCol = explodeStartTileCol; explodeTileCol < colCount; ++explodeTileCol)
                 {
                     if (GameManager.Instance.IsValidTile(explodeStartTileRow, explodeTileCol + 1))
                     {

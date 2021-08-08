@@ -7,12 +7,7 @@ namespace TEMPJAMNAMEREPLACEME
     public class LoadedLevel : MonoBehaviour
     {
         // the internal representation of the board
-        Tile[,] level = new Tile[DataManager.NUM_ROWS, DataManager.NUM_COLS];
-
-        public Tile[,] GetLevel()
-        {
-            return level;
-        }
+        public Tile[,] level;
 
         TileOccupier player;
 
@@ -24,8 +19,11 @@ namespace TEMPJAMNAMEREPLACEME
         // initializes all of the individual tiles
         void InitializeLevel(OccupierType[,] levelOccupiers)
         {
+            DeconstructLevel();
+
             int levelHeight = levelOccupiers.GetLength(0);
             int levelWidth = levelOccupiers.GetLength(1);
+            level = new Tile[levelHeight, levelWidth];
             // create each of our tiles
             for (int row = 0; row < levelHeight; ++row)
             {
@@ -94,9 +92,14 @@ namespace TEMPJAMNAMEREPLACEME
 
         public void DeconstructLevel()
         {
-            for (int row = 0; row < DataManager.NUM_ROWS; ++row)
+            if (level == null)
+                return;
+            
+            var rowQty = level.GetLength(0);
+            var colsQty = level.GetLength(1);
+            for (int row = 0; row < rowQty; ++row)
             {
-                for (int col = 0; col < DataManager.NUM_COLS; ++col)
+                for (int col = 0; col < colsQty; ++col)
                 {
                     // delete our tile
                     Tile tile = level[row, col];
@@ -159,7 +162,10 @@ namespace TEMPJAMNAMEREPLACEME
         public Vector3 GetGameSpacePosFromRowCol(int row, int col)
         {
             Vector3 retVec = new Vector3(0, 0);
-            if (row >= 0 && row < DataManager.NUM_ROWS && col >= 0 && col < DataManager.NUM_COLS)
+            var rowQty = level.GetLength(0);
+            var colsQty = level.GetLength(1);
+            
+            if (row >= 0 && row < rowQty && col >= 0 && col < colsQty)
             {
                 retVec.x = DataManager.PHYSICAL_START_POS_VEC.x + (col * DataManager.DISTANCE_BETWEEN_TILES);
                 retVec.y = DataManager.PHYSICAL_START_POS_VEC.y - (row * DataManager.DISTANCE_BETWEEN_TILES);

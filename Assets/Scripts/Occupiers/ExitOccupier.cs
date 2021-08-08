@@ -15,6 +15,7 @@ namespace TEMPJAMNAMEREPLACEME
         {
             if (collidingOccupier is PlayerOccupier)
             {
+                Destroy(gameObject);
                 // we win
                 GameManager.Instance.CompleteLevel();
 

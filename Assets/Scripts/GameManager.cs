@@ -54,18 +54,10 @@ namespace TEMPJAMNAMEREPLACEME
         public GameObject GetExitObj() { return exitObj; }
 
         [SerializeField]
-        Button level0Btn;
-
-        [SerializeField]
-        Button destroyLevelsBtn;
-
-        [SerializeField]
         GameUI gameUI;
 #pragma warning restore CS0649
 
-        private LoadedLevel curLevel = null;
-        public void SetCurLevel(LoadedLevel newLevel) { curLevel = newLevel; }
-        public LoadedLevel GetCurLevel() { return curLevel; }
+        private LoadedLevel curLevel;
         private int curLevelIndex = 0;
         public int GetCurLevelIndex() { return curLevelIndex; }
 
@@ -108,7 +100,8 @@ namespace TEMPJAMNAMEREPLACEME
         {
             if (!(curLevel is null))
             {
-                curLevel.LoadLevel(curLevelIndex + 1);
+                curLevelIndex++;
+                curLevel.LoadLevel(curLevelIndex);
             }
         }
 
@@ -132,31 +125,34 @@ namespace TEMPJAMNAMEREPLACEME
 
         public Tile GetTileAtLocation(int row, int col)
         {
-            if (row >= 0 && row < DataManager.NUM_ROWS && col >= 0 && col < DataManager.NUM_COLS)
+            Tile[,] level = curLevel.level;
+            int rowQty = GetCurLevelRowCount();
+            int colsQty = GetCurLevelColCount();
+            if (row >= 0 && row < rowQty && col >= 0 && col < colsQty)
             {
-                return curLevel.GetLevel()[row, col];
+                return level[row, col];
             }
 
             return null;
         }
         public TileOccupier GetOccupierAtLocation(int row, int col)
         {
-            if (row >= 0 && row < DataManager.NUM_ROWS && col >= 0 && col < DataManager.NUM_COLS)
+            Tile[,] level = curLevel.level;
+            int rowQty = GetCurLevelRowCount();
+            int colsQty = GetCurLevelColCount();
+            if (row >= 0 && row < rowQty && col >= 0 && col < colsQty)
             {
-                return curLevel.GetLevel()[row, col].GetTileOuccupier();
+                return level[row, col].GetTileOuccupier();
             }
 
             return null;
         }
 
-        public TileOccupier GetPlayer()
-        {
-            return curLevel.GetPlayer();
-        }
-
         public bool IsValidTile(int newRow, int newCol)
         {
-            if (newRow >= 0 && newRow < DataManager.NUM_ROWS && newCol >= 0 && newCol < DataManager.NUM_COLS)
+            int rowQty = GetCurLevelRowCount();
+            int colsQty = GetCurLevelColCount();
+            if (newRow >= 0 && newRow < rowQty && newCol >= 0 && newCol < colsQty)
             {
                 return true;
             }
@@ -194,6 +190,16 @@ namespace TEMPJAMNAMEREPLACEME
             gameUI.ShowNextLevelScreen(endingMoves, endingExplodes);
 
             ResetScores();
+        }
+
+        public int GetCurLevelRowCount()
+        {
+            return curLevel.level.GetLength(0);
+        }
+
+        public int GetCurLevelColCount()
+        {
+            return curLevel.level.GetLength(1);
         }
     }
 }

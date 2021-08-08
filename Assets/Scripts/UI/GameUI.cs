@@ -99,6 +99,7 @@ namespace TEMPJAMNAMEREPLACEME
         private void NextLevel()
         {
             GameManager.Instance.LoadNextLevel();
+            nextLevelObject.SetActive(false);
         }
 
         public void ShowNextLevelScreen(int endingMoves, int endingExplodes)
