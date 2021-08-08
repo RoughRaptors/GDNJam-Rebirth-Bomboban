@@ -170,7 +170,7 @@ namespace TEMPJAMNAMEREPLACEME
 
         public bool LoadLevel(int levelIndex)
         {
-            if (levelIndex <= DataManager.levelOccupiers.Count)
+            if (levelIndex < DataManager.levelOccupiers.Count)
             {
                 var levelOccupiers = DataManager.levelOccupiers[levelIndex];
                 InitializeLevel(levelOccupiers);
