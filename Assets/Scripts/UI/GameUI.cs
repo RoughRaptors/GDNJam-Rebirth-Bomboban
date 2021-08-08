@@ -104,7 +104,7 @@ namespace TEMPJAMNAMEREPLACEME
         public void ShowNextLevelScreen(int endingMoves, int endingExplodes)
         {
             // first off, did we win? separate screen
-            if(GameManager.Instance.GetCurLevelIndex() == DataManager.levelTiles.Count - 1)
+            if(GameManager.Instance.GetCurLevelIndex() == DataManager.levelOccupiers.Count - 1)
             {
                 gameOverObject.SetActive(true);
                 gameOverScoreObject.text = "YOU WIN! \n" + "Num Moves: " + endingMoves.ToString() + "\n" + "Num Explodes: " + endingExplodes.ToString();

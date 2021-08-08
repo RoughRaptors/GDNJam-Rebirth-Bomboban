@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -39,73 +38,162 @@ namespace TEMPJAMNAMEREPLACEME
             Ground = 0,
         }
 
-        public enum OccupierType
-        {
-            None = 0,
-            Player,
-            IceCube,
-            IceShard,
-            CrackedRock,
-            TitaniumBox,
-            Wall,
-            Hole,
-            Exit,
-            MAX = 8
-        }
-
-        public static readonly int[,] testLevelTiles1 = new int[NUM_ROWS, NUM_COLS] { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                                                            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                                                            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                                                            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                                                            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                                                            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                                                            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                                                            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                                                            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                                                            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                                                            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                                                            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                                                            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                                                            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                                                            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                                                            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                                                            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                                                            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                                                            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                                                            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
-        };
-
-        public static readonly int[,] testLevelOccupiers1 = new int[NUM_ROWS, NUM_COLS] { { 0, 1, 2, 0, 4, 5, 6, 7, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                                                            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                                                            { 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                                                            { 0, 0, 0, 0, 5, 5, 5, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2 },
-                                                            { 0, 2, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                                                            { 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0 },
-                                                            { 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                                                            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                                                            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                                                            { 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                                                            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                                                            { 0, 0, 0, 0, 5, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                                                            { 0, 0, 0, 0, 5, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                                                            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                                                            { 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                                                            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                                                            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                                                            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                                                            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                                                            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
-        };
-
         // cache off our levels since we are going to need to do this after the refactor and tell the game when we are ready for them
         // each "level" is composed of a set of tiles AND a set of occupiers - not ideal but we don't have time to do it right and i'm bad with bitmasks
         // we can access our levels easily this way, especially for testing, just be careful to not mix up indicies for tileLevels and occupierLevels, it's error prone
-        public static List<int[,]> levelTiles = new List<int[,]>();
-        public static List<int[,]> levelOccupiers = new List<int[,]>();
+        public static List<OccupierType[,]> levelOccupiers = new List<OccupierType[,]>();
+
         public static void InitializeLevelsData()
         {
-            levelTiles.Add(testLevelTiles1);
-            levelOccupiers.Add(testLevelOccupiers1);
+            AddLevel(
+                @"#####
+#P.G#
+#####");
+            AddLevel(
+                @"##########
+#R..R....#
+#........#
+#......###
+#R.P..R.G#
+#......###
+#........#
+#...R....#
+##########");
+
+            AddLevel(
+                @"##########
+##......##
+#PY.....G#
+##......##
+##########");
+            AddLevel(
+                @"##########
+#YH.YHY.P#
+#......HH#
+#......###
+#YY...YHG#
+#......###
+#.H......#
+#...Y....#
+##########");
+
+            AddLevel(
+                @"##########
+#PT.T....#
+#T#......#
+#.....RRR#
+#.....T.G#
+#.....R###
+#........#
+#...T....#
+##########");
+
+            AddLevel(
+                @"####################
+#G#................#
+#.T.TTTTTTTTTTTTTT.#
+#.T.R...R.R..R...T.#
+#.TR..RR.R.RR..R.T.#
+#.T.RRR.R..R.....T.#
+#.T.R..RR....R...T.#
+#.T.......R..R...T.#
+#.T..R.R.R.R...R.T.#
+#.T..............T.#
+#.T.R........R...T.#
+#.T.....PY.......T.#
+#.T..............T.#
+#.TTTTTTTTTTTTTTTT.#
+#..................#
+####################");
+
+            AddLevel(
+                @"############
+#######....#
+#GHHY..YPT.#
+#######....#
+############");
+
+            AddLevel(
+                @"##########
+#####...##
+#P.Y.Y..##
+#...##..##
+#.YR..TH.#
+#..HT.H.T#
+#..Y.HH..#
+#..H.HH.##
+#.H..H.HG#
+##########");
+
+            AddLevel(
+                @"############
+#......#.Y.#
+#...Y..#T..#
+#.......PT.#
+#......#H#G#
+#...R...HT.#
+#.TR..T#HTY#
+######.....#
+############");
+
+            AddLevel(
+                @"###########
+#.........#
+#..##R##..#
+#.#YYGRR#.#
+#.#YRRRH#.#
+#..#RRH#..#
+#...#H#...#
+#....#....#
+#P........#
+###########");
+        }
+
+        private static void AddLevel(string levelText)
+        {
+            var levelLines = levelText.Replace("\r\n", "\n").Split('\n');
+            int height = levelLines.Length;
+            int width = levelLines[0].Length;
+
+            OccupierType[,] convertedLevel = new OccupierType[height, width];
+            for (int i = 0; i < height; i++)
+            {
+                for (int j = 0; j < width; j++)
+                {
+                    convertedLevel[i, j] = ConvertPrototypeCharToInt(levelLines, i, j);
+                }
+            }
+
+            levelOccupiers.Add(convertedLevel);
+        }
+
+        private static OccupierType ConvertPrototypeCharToInt(string[] levelLines, int i, int j)
+        {
+            char c = levelLines[i][j];
+
+            switch (c)
+            {
+                case '#':
+                    return OccupierType.Wall;
+                case 'P':
+                    return OccupierType.Player;
+                case 'Y':
+                    return OccupierType.IceCube;
+                case 'H':
+                    return OccupierType.Hole;
+                case 'T':
+                    return OccupierType.TitaniumBox;
+                case 'R':
+                    return OccupierType.CrackedRock;
+                case 'G':
+                    return OccupierType.Exit;
+                case '.':
+                    return OccupierType.None;
+                default:
+                    Debug.LogError(
+                        $"Trying to convert invalid character {c.ToString()} from string to OccupierType enum");
+                    return OccupierType.None;
+            }
         }
     }
 }
